@@ -1,0 +1,795 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0343DE8ACE5C6B1622005DFED24DB6D5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
+		4D072EABB11458050A57FC912F465773 /* Pods-CallSourceNewObjCUITests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4668E9E63F7AB56DFBD722C9E0AF917C /* Pods-CallSourceNewObjCUITests-dummy.m */; };
+		6B6EB432CCBB7EA4E08E7C4172A19C20 /* JFRSecurity.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F23AE2CDFEE098AE77DBF435724884A /* JFRSecurity.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		72730975B28674D1587AE15D974A90B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
+		779CB949F7C8AABDFBD2A770354630A3 /* JFRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 37299CA3DBFA2EE493F3E6CD3FD69BCF /* JFRWebSocket.m */; };
+		7B0E71C977B02F49E6F0068C614867F2 /* JFRSecurity.m in Sources */ = {isa = PBXBuildFile; fileRef = C2BA6499BB4E25C1580903017EC56C9B /* JFRSecurity.m */; };
+		81E31DA77492BCD48C1FD3E17B1D48D0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
+		96589B46C171501A3E61202702B54602 /* Pods-CallSourceNewObjC-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7C83E04DA5008BE2A3378D1ED8C3C5 /* Pods-CallSourceNewObjC-dummy.m */; };
+		A2256F6A88849A010A315E21BFD9A827 /* jetfire-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 83A82784C933DCDB0D399AD2AE39CED9 /* jetfire-dummy.m */; };
+		B9FC5EEA26E3D0E418D15A7ECD363931 /* JFRWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = D6E205D1DF874F13201E58AD4462FEDC /* JFRWebSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CD0C92625722DDA5BBEADEFD91285689 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
+		E2AC0DCE9CAC622C52308E20A5223548 /* Pods-CallSourceNewObjCTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6764BD34F7F6D57A1609B23C9D7EDC45 /* Pods-CallSourceNewObjCTests-dummy.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A524EAB29C740A33650970AB6BEBDCC4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B431759576E0DCF29829F894949D1529;
+			remoteInfo = jetfire;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0081D48DFF3588493166506BE1579D5F /* Pods-CallSourceNewObjC-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-CallSourceNewObjC-frameworks.sh"; sourceTree = "<group>"; };
+		043516CCC1CCBBCCAEEF2CE873B5F82C /* Pods-CallSourceNewObjCUITests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-CallSourceNewObjCUITests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		070AFBC0EBCD6AC8AC09C7CA68CC65F9 /* Pods-CallSourceNewObjCTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-CallSourceNewObjCTests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		078D5A1E61AD39A3D66842832F5AC0F8 /* Pods-CallSourceNewObjC-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-CallSourceNewObjC-acknowledgements.markdown"; sourceTree = "<group>"; };
+		0E9CA1B454DD70E64ED1C1AE6604BB9D /* RTCMediaStream.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCMediaStream.h; path = libjingle_peerconnection/Headers/RTCMediaStream.h; sourceTree = "<group>"; };
+		0F4F0F834D8DC90B70C6A09C6B80BC1B /* RTCICECandidate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCICECandidate.h; path = libjingle_peerconnection/Headers/RTCICECandidate.h; sourceTree = "<group>"; };
+		0F7E888A8B11BDF19280927751873149 /* Pods-CallSourceNewObjC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-CallSourceNewObjC.debug.xcconfig"; sourceTree = "<group>"; };
+		0F7F0D03B9E1AB69BB43AEB7D19AF7D7 /* RTCFileLogger.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCFileLogger.h; path = libjingle_peerconnection/Headers/RTCFileLogger.h; sourceTree = "<group>"; };
+		11074DA5463ECC85884197729A5B4827 /* RTCAVFoundationVideoSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCAVFoundationVideoSource.h; path = libjingle_peerconnection/Headers/RTCAVFoundationVideoSource.h; sourceTree = "<group>"; };
+		179DECC011E7DFF04EAB741105D09650 /* RTCSessionDescription.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCSessionDescription.h; path = libjingle_peerconnection/Headers/RTCSessionDescription.h; sourceTree = "<group>"; };
+		1DA8DC98A0A360081EE9B966AEFA3014 /* Pods-CallSourceNewObjCUITests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-CallSourceNewObjCUITests-frameworks.sh"; sourceTree = "<group>"; };
+		234A7549C043FAE41252EB57F8C1B78F /* Pods-CallSourceNewObjCUITests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-CallSourceNewObjCUITests-acknowledgements.plist"; sourceTree = "<group>"; };
+		2E486F5B5950E22466B3FDBA7494B6E5 /* libPods-CallSourceNewObjCUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-CallSourceNewObjCUITests.a"; path = "libPods-CallSourceNewObjCUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		37299CA3DBFA2EE493F3E6CD3FD69BCF /* JFRWebSocket.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = JFRWebSocket.m; sourceTree = "<group>"; };
+		42D1B5EC00E9391253AEF5358FB639BC /* RTCI420Frame.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCI420Frame.h; path = libjingle_peerconnection/Headers/RTCI420Frame.h; sourceTree = "<group>"; };
+		4668E9E63F7AB56DFBD722C9E0AF917C /* Pods-CallSourceNewObjCUITests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-CallSourceNewObjCUITests-dummy.m"; sourceTree = "<group>"; };
+		47EE27ADB1DD6ADEEC39D7246490EBDF /* Pods-CallSourceNewObjCTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-CallSourceNewObjCTests.debug.xcconfig"; sourceTree = "<group>"; };
+		4B8D47F7419E1804F547BCCF9DC50446 /* jetfire.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = jetfire.xcconfig; sourceTree = "<group>"; };
+		50C997D671E36A8B8FC0B33AB745970A /* RTCPair.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCPair.h; path = libjingle_peerconnection/Headers/RTCPair.h; sourceTree = "<group>"; };
+		5F210BCCE19C2F4B65F2CF58770DF135 /* RTCAudioSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCAudioSource.h; path = libjingle_peerconnection/Headers/RTCAudioSource.h; sourceTree = "<group>"; };
+		6394F45B23A80C6BDAFA82F8B9772584 /* Pods-CallSourceNewObjCUITests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-CallSourceNewObjCUITests-resources.sh"; sourceTree = "<group>"; };
+		64D28F3F7D133F61DAA7EC53C065B662 /* RTCVideoRenderer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCVideoRenderer.h; path = libjingle_peerconnection/Headers/RTCVideoRenderer.h; sourceTree = "<group>"; };
+		6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		6764BD34F7F6D57A1609B23C9D7EDC45 /* Pods-CallSourceNewObjCTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-CallSourceNewObjCTests-dummy.m"; sourceTree = "<group>"; };
+		6B547F206AEE25B2E3D0E960AF3DE857 /* RTCDataChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCDataChannel.h; path = libjingle_peerconnection/Headers/RTCDataChannel.h; sourceTree = "<group>"; };
+		6CD8AC01049DA71E5D90D1EEE11CBE57 /* RTCVideoCapturer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCVideoCapturer.h; path = libjingle_peerconnection/Headers/RTCVideoCapturer.h; sourceTree = "<group>"; };
+		713C0945FCE0AFF4F203AE599566ABAC /* libjetfire.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libjetfire.a; path = libjetfire.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		749F3A0D0C67C29B7F014703FE4E3C36 /* RTCPeerConnectionFactory.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCPeerConnectionFactory.h; path = libjingle_peerconnection/Headers/RTCPeerConnectionFactory.h; sourceTree = "<group>"; };
+		758C24B1C1C18B251A5C3DEAE2006341 /* RTCSessionDescriptionDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCSessionDescriptionDelegate.h; path = libjingle_peerconnection/Headers/RTCSessionDescriptionDelegate.h; sourceTree = "<group>"; };
+		78077E40123CD7D2B357F6561A6A5043 /* libWebRTC.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libWebRTC.a; path = libjingle_peerconnection/libWebRTC.a; sourceTree = "<group>"; };
+		79FF7C3C094AF895EF1730629685C858 /* RTCPeerConnection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCPeerConnection.h; path = libjingle_peerconnection/Headers/RTCPeerConnection.h; sourceTree = "<group>"; };
+		83A82784C933DCDB0D399AD2AE39CED9 /* jetfire-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "jetfire-dummy.m"; sourceTree = "<group>"; };
+		8B018788E7D19EB84A129F4D29407C39 /* RTCStatsReport.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCStatsReport.h; path = libjingle_peerconnection/Headers/RTCStatsReport.h; sourceTree = "<group>"; };
+		8C13D1CA18AA70491A0DA64379DB3954 /* RTCICEServer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCICEServer.h; path = libjingle_peerconnection/Headers/RTCICEServer.h; sourceTree = "<group>"; };
+		8C99DB1D39630905FB074559083AED35 /* Pods-CallSourceNewObjCTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-CallSourceNewObjCTests-acknowledgements.plist"; sourceTree = "<group>"; };
+		900D468F8EFE6BDDB4BC9076F01C34CE /* libPods-CallSourceNewObjCTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-CallSourceNewObjCTests.a"; path = "libPods-CallSourceNewObjCTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		94C939A42AC8FEDAC8D216A88D99C02F /* RTCStatsDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCStatsDelegate.h; path = libjingle_peerconnection/Headers/RTCStatsDelegate.h; sourceTree = "<group>"; };
+		978D80C1D30278618E3F49C5C8F73E22 /* RTCVideoSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCVideoSource.h; path = libjingle_peerconnection/Headers/RTCVideoSource.h; sourceTree = "<group>"; };
+		9A7C83E04DA5008BE2A3378D1ED8C3C5 /* Pods-CallSourceNewObjC-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-CallSourceNewObjC-dummy.m"; sourceTree = "<group>"; };
+		9F23AE2CDFEE098AE77DBF435724884A /* JFRSecurity.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = JFRSecurity.h; sourceTree = "<group>"; };
+		A237584D659F5E3F993B9D97D4472D6C /* Pods-CallSourceNewObjC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-CallSourceNewObjC.release.xcconfig"; sourceTree = "<group>"; };
+		A3DAB9DF4D9B9E4B5B49B0798D8D455D /* RTCOpenGLVideoRenderer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCOpenGLVideoRenderer.h; path = libjingle_peerconnection/Headers/RTCOpenGLVideoRenderer.h; sourceTree = "<group>"; };
+		AA20C8337A3F315272CA53A4B97B3138 /* Pods-CallSourceNewObjCUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-CallSourceNewObjCUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		ACABBCB22F2151ED5FA45BF6FBB80D3D /* RTCMediaConstraints.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCMediaConstraints.h; path = libjingle_peerconnection/Headers/RTCMediaConstraints.h; sourceTree = "<group>"; };
+		B0B23630F187DBC2DF56A5293AC2C75F /* RTCEAGLVideoView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCEAGLVideoView.h; path = libjingle_peerconnection/Headers/RTCEAGLVideoView.h; sourceTree = "<group>"; };
+		B10E336AA835379DA7BF6AEE6D045D7A /* Pods-CallSourceNewObjC-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-CallSourceNewObjC-resources.sh"; sourceTree = "<group>"; };
+		B12F2B9C9E5BED53915FB64BCF64E49D /* RTCMediaSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCMediaSource.h; path = libjingle_peerconnection/Headers/RTCMediaSource.h; sourceTree = "<group>"; };
+		B291B6CABC8C1AB58D7953BC11A3EFE1 /* RTCLogging.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCLogging.h; path = libjingle_peerconnection/Headers/RTCLogging.h; sourceTree = "<group>"; };
+		B64C642C6B0745FB09DC01A81175801B /* RTCTypes.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCTypes.h; path = libjingle_peerconnection/Headers/RTCTypes.h; sourceTree = "<group>"; };
+		B8FE3513F12104C61E81721FC82C5FD7 /* RTCMediaStreamTrack.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCMediaStreamTrack.h; path = libjingle_peerconnection/Headers/RTCMediaStreamTrack.h; sourceTree = "<group>"; };
+		BA517A7989C49B21D17C23BD081B2950 /* jetfire-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "jetfire-prefix.pch"; sourceTree = "<group>"; };
+		BEFA520E3FF8BD92FE0531D0A1806718 /* RTCNSGLVideoView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCNSGLVideoView.h; path = libjingle_peerconnection/Headers/RTCNSGLVideoView.h; sourceTree = "<group>"; };
+		C0891CFFE96E277AB807140032FADEED /* RTCAudioTrack.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCAudioTrack.h; path = libjingle_peerconnection/Headers/RTCAudioTrack.h; sourceTree = "<group>"; };
+		C2BA6499BB4E25C1580903017EC56C9B /* JFRSecurity.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = JFRSecurity.m; sourceTree = "<group>"; };
+		C4744920784351878FE2FCDF9BA07B70 /* Pods-CallSourceNewObjCTests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-CallSourceNewObjCTests-resources.sh"; sourceTree = "<group>"; };
+		CBE7128B4FD4C32C7E1C2670E8D56BED /* Pods-CallSourceNewObjCTests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-CallSourceNewObjCTests-frameworks.sh"; sourceTree = "<group>"; };
+		D6E205D1DF874F13201E58AD4462FEDC /* JFRWebSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = JFRWebSocket.h; sourceTree = "<group>"; };
+		D9DD4FB51911498A34A44296C8B35B9D /* RTCPeerConnectionInterface.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCPeerConnectionInterface.h; path = libjingle_peerconnection/Headers/RTCPeerConnectionInterface.h; sourceTree = "<group>"; };
+		E1FE13A223683C83570292849E28C780 /* Pods-CallSourceNewObjCUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-CallSourceNewObjCUITests.release.xcconfig"; sourceTree = "<group>"; };
+		E383D854547CAA90C709A5C11B62A31E /* libPods-CallSourceNewObjC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-CallSourceNewObjC.a"; path = "libPods-CallSourceNewObjC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E3B2181D4BCCBA5B8F3A0A3812BD4955 /* Pods-CallSourceNewObjC-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-CallSourceNewObjC-acknowledgements.plist"; sourceTree = "<group>"; };
+		E9BD037303B777B166C137A8F7F92FAD /* Pods-CallSourceNewObjCTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-CallSourceNewObjCTests.release.xcconfig"; sourceTree = "<group>"; };
+		F17217BD46C9C8D57053163FB6F1C9E8 /* RTCVideoTrack.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCVideoTrack.h; path = libjingle_peerconnection/Headers/RTCVideoTrack.h; sourceTree = "<group>"; };
+		FF8F4D7B1B8FF1062F24048D4CFDF16F /* RTCPeerConnectionDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RTCPeerConnectionDelegate.h; path = libjingle_peerconnection/Headers/RTCPeerConnectionDelegate.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		283735B1A78D7EA3FD94C4EAADFFBE60 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				72730975B28674D1587AE15D974A90B2 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		349CEECCD465BD2FEC53DF66794D5BB1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81E31DA77492BCD48C1FD3E17B1D48D0 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5DC0EFA7F2D1691E998FF473CFB172CD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0343DE8ACE5C6B1622005DFED24DB6D5 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81A29741811F5670258D2E7042F07B19 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD0C92625722DDA5BBEADEFD91285689 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		00FFCE245D800B32FEA31A855AA9E188 /* jetfire */ = {
+			isa = PBXGroup;
+			children = (
+				9F23AE2CDFEE098AE77DBF435724884A /* JFRSecurity.h */,
+				C2BA6499BB4E25C1580903017EC56C9B /* JFRSecurity.m */,
+				D6E205D1DF874F13201E58AD4462FEDC /* JFRWebSocket.h */,
+				37299CA3DBFA2EE493F3E6CD3FD69BCF /* JFRWebSocket.m */,
+				D5FD04B465FF6A454440C2B402AA8663 /* Support Files */,
+			);
+			name = jetfire;
+			path = jetfire;
+			sourceTree = "<group>";
+		};
+		083CFF226B95F36A694862C12E860419 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				00FFCE245D800B32FEA31A855AA9E188 /* jetfire */,
+				9982E8E1E64C1CE7D24C7375218C892A /* libjingle_peerconnection */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		0A58F55F689D2918CA7F9474A418BC0C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				78077E40123CD7D2B357F6561A6A5043 /* libWebRTC.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4008FBFB0A82F760EEB90706C1EC72F1 /* Pods-CallSourceNewObjCTests */ = {
+			isa = PBXGroup;
+			children = (
+				070AFBC0EBCD6AC8AC09C7CA68CC65F9 /* Pods-CallSourceNewObjCTests-acknowledgements.markdown */,
+				8C99DB1D39630905FB074559083AED35 /* Pods-CallSourceNewObjCTests-acknowledgements.plist */,
+				6764BD34F7F6D57A1609B23C9D7EDC45 /* Pods-CallSourceNewObjCTests-dummy.m */,
+				CBE7128B4FD4C32C7E1C2670E8D56BED /* Pods-CallSourceNewObjCTests-frameworks.sh */,
+				C4744920784351878FE2FCDF9BA07B70 /* Pods-CallSourceNewObjCTests-resources.sh */,
+				47EE27ADB1DD6ADEEC39D7246490EBDF /* Pods-CallSourceNewObjCTests.debug.xcconfig */,
+				E9BD037303B777B166C137A8F7F92FAD /* Pods-CallSourceNewObjCTests.release.xcconfig */,
+			);
+			name = "Pods-CallSourceNewObjCTests";
+			path = "Target Support Files/Pods-CallSourceNewObjCTests";
+			sourceTree = "<group>";
+		};
+		5CBF5A1D31B20621047FCDB5C838EA69 /* Pods-CallSourceNewObjCUITests */ = {
+			isa = PBXGroup;
+			children = (
+				043516CCC1CCBBCCAEEF2CE873B5F82C /* Pods-CallSourceNewObjCUITests-acknowledgements.markdown */,
+				234A7549C043FAE41252EB57F8C1B78F /* Pods-CallSourceNewObjCUITests-acknowledgements.plist */,
+				4668E9E63F7AB56DFBD722C9E0AF917C /* Pods-CallSourceNewObjCUITests-dummy.m */,
+				1DA8DC98A0A360081EE9B966AEFA3014 /* Pods-CallSourceNewObjCUITests-frameworks.sh */,
+				6394F45B23A80C6BDAFA82F8B9772584 /* Pods-CallSourceNewObjCUITests-resources.sh */,
+				AA20C8337A3F315272CA53A4B97B3138 /* Pods-CallSourceNewObjCUITests.debug.xcconfig */,
+				E1FE13A223683C83570292849E28C780 /* Pods-CallSourceNewObjCUITests.release.xcconfig */,
+			);
+			name = "Pods-CallSourceNewObjCUITests";
+			path = "Target Support Files/Pods-CallSourceNewObjCUITests";
+			sourceTree = "<group>";
+		};
+		6B716C937422544B3A5BADCC820791A9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				713C0945FCE0AFF4F203AE599566ABAC /* libjetfire.a */,
+				E383D854547CAA90C709A5C11B62A31E /* libPods-CallSourceNewObjC.a */,
+				900D468F8EFE6BDDB4BC9076F01C34CE /* libPods-CallSourceNewObjCTests.a */,
+				2E486F5B5950E22466B3FDBA7494B6E5 /* libPods-CallSourceNewObjCUITests.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7DB346D0F39D3F0E887471402A8071AB = {
+			isa = PBXGroup;
+			children = (
+				93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */,
+				BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */,
+				083CFF226B95F36A694862C12E860419 /* Pods */,
+				6B716C937422544B3A5BADCC820791A9 /* Products */,
+				B70B38636578A47FD4165672EB6EA3B5 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		9982E8E1E64C1CE7D24C7375218C892A /* libjingle_peerconnection */ = {
+			isa = PBXGroup;
+			children = (
+				5F210BCCE19C2F4B65F2CF58770DF135 /* RTCAudioSource.h */,
+				C0891CFFE96E277AB807140032FADEED /* RTCAudioTrack.h */,
+				11074DA5463ECC85884197729A5B4827 /* RTCAVFoundationVideoSource.h */,
+				6B547F206AEE25B2E3D0E960AF3DE857 /* RTCDataChannel.h */,
+				B0B23630F187DBC2DF56A5293AC2C75F /* RTCEAGLVideoView.h */,
+				0F7F0D03B9E1AB69BB43AEB7D19AF7D7 /* RTCFileLogger.h */,
+				42D1B5EC00E9391253AEF5358FB639BC /* RTCI420Frame.h */,
+				0F4F0F834D8DC90B70C6A09C6B80BC1B /* RTCICECandidate.h */,
+				8C13D1CA18AA70491A0DA64379DB3954 /* RTCICEServer.h */,
+				B291B6CABC8C1AB58D7953BC11A3EFE1 /* RTCLogging.h */,
+				ACABBCB22F2151ED5FA45BF6FBB80D3D /* RTCMediaConstraints.h */,
+				B12F2B9C9E5BED53915FB64BCF64E49D /* RTCMediaSource.h */,
+				0E9CA1B454DD70E64ED1C1AE6604BB9D /* RTCMediaStream.h */,
+				B8FE3513F12104C61E81721FC82C5FD7 /* RTCMediaStreamTrack.h */,
+				BEFA520E3FF8BD92FE0531D0A1806718 /* RTCNSGLVideoView.h */,
+				A3DAB9DF4D9B9E4B5B49B0798D8D455D /* RTCOpenGLVideoRenderer.h */,
+				50C997D671E36A8B8FC0B33AB745970A /* RTCPair.h */,
+				79FF7C3C094AF895EF1730629685C858 /* RTCPeerConnection.h */,
+				FF8F4D7B1B8FF1062F24048D4CFDF16F /* RTCPeerConnectionDelegate.h */,
+				749F3A0D0C67C29B7F014703FE4E3C36 /* RTCPeerConnectionFactory.h */,
+				D9DD4FB51911498A34A44296C8B35B9D /* RTCPeerConnectionInterface.h */,
+				179DECC011E7DFF04EAB741105D09650 /* RTCSessionDescription.h */,
+				758C24B1C1C18B251A5C3DEAE2006341 /* RTCSessionDescriptionDelegate.h */,
+				94C939A42AC8FEDAC8D216A88D99C02F /* RTCStatsDelegate.h */,
+				8B018788E7D19EB84A129F4D29407C39 /* RTCStatsReport.h */,
+				B64C642C6B0745FB09DC01A81175801B /* RTCTypes.h */,
+				6CD8AC01049DA71E5D90D1EEE11CBE57 /* RTCVideoCapturer.h */,
+				64D28F3F7D133F61DAA7EC53C065B662 /* RTCVideoRenderer.h */,
+				978D80C1D30278618E3F49C5C8F73E22 /* RTCVideoSource.h */,
+				F17217BD46C9C8D57053163FB6F1C9E8 /* RTCVideoTrack.h */,
+				0A58F55F689D2918CA7F9474A418BC0C /* Frameworks */,
+			);
+			name = libjingle_peerconnection;
+			path = libjingle_peerconnection;
+			sourceTree = "<group>";
+		};
+		B70B38636578A47FD4165672EB6EA3B5 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				D69C96630779F9759CA75B814151E20A /* Pods-CallSourceNewObjC */,
+				4008FBFB0A82F760EEB90706C1EC72F1 /* Pods-CallSourceNewObjCTests */,
+				5CBF5A1D31B20621047FCDB5C838EA69 /* Pods-CallSourceNewObjCUITests */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D35AF013A5F0BAD4F32504907A52519E /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D35AF013A5F0BAD4F32504907A52519E /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		D5FD04B465FF6A454440C2B402AA8663 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				4B8D47F7419E1804F547BCCF9DC50446 /* jetfire.xcconfig */,
+				83A82784C933DCDB0D399AD2AE39CED9 /* jetfire-dummy.m */,
+				BA517A7989C49B21D17C23BD081B2950 /* jetfire-prefix.pch */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/jetfire";
+			sourceTree = "<group>";
+		};
+		D69C96630779F9759CA75B814151E20A /* Pods-CallSourceNewObjC */ = {
+			isa = PBXGroup;
+			children = (
+				078D5A1E61AD39A3D66842832F5AC0F8 /* Pods-CallSourceNewObjC-acknowledgements.markdown */,
+				E3B2181D4BCCBA5B8F3A0A3812BD4955 /* Pods-CallSourceNewObjC-acknowledgements.plist */,
+				9A7C83E04DA5008BE2A3378D1ED8C3C5 /* Pods-CallSourceNewObjC-dummy.m */,
+				0081D48DFF3588493166506BE1579D5F /* Pods-CallSourceNewObjC-frameworks.sh */,
+				B10E336AA835379DA7BF6AEE6D045D7A /* Pods-CallSourceNewObjC-resources.sh */,
+				0F7E888A8B11BDF19280927751873149 /* Pods-CallSourceNewObjC.debug.xcconfig */,
+				A237584D659F5E3F993B9D97D4472D6C /* Pods-CallSourceNewObjC.release.xcconfig */,
+			);
+			name = "Pods-CallSourceNewObjC";
+			path = "Target Support Files/Pods-CallSourceNewObjC";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		6C9E4A76040295EB69384471FE9F83A9 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6B6EB432CCBB7EA4E08E7C4172A19C20 /* JFRSecurity.h in Headers */,
+				B9FC5EEA26E3D0E418D15A7ECD363931 /* JFRWebSocket.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		396940569BA3EE6EC3D1CAC7FC42DC20 /* Pods-CallSourceNewObjCTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 72B41C6E5A1B3AFA2F7B6B51BB35DE2A /* Build configuration list for PBXNativeTarget "Pods-CallSourceNewObjCTests" */;
+			buildPhases = (
+				EFBB220FE1ECBBA462DA2A567272CF13 /* Sources */,
+				349CEECCD465BD2FEC53DF66794D5BB1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-CallSourceNewObjCTests";
+			productName = "Pods-CallSourceNewObjCTests";
+			productReference = 900D468F8EFE6BDDB4BC9076F01C34CE /* libPods-CallSourceNewObjCTests.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		B431759576E0DCF29829F894949D1529 /* jetfire */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0AA063A3D20C7E986BA6A4742B15E6A1 /* Build configuration list for PBXNativeTarget "jetfire" */;
+			buildPhases = (
+				ED3C0590219878519E43E63D7321028D /* Sources */,
+				5DC0EFA7F2D1691E998FF473CFB172CD /* Frameworks */,
+				6C9E4A76040295EB69384471FE9F83A9 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = jetfire;
+			productName = jetfire;
+			productReference = 713C0945FCE0AFF4F203AE599566ABAC /* libjetfire.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		C0425D5D0B913F7F326A7DE4C242995A /* Pods-CallSourceNewObjCUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 79052C4A93F4AE0B3B68260AD76200E8 /* Build configuration list for PBXNativeTarget "Pods-CallSourceNewObjCUITests" */;
+			buildPhases = (
+				CF4902F29FF58DCACA5FB9DF220A6A30 /* Sources */,
+				283735B1A78D7EA3FD94C4EAADFFBE60 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-CallSourceNewObjCUITests";
+			productName = "Pods-CallSourceNewObjCUITests";
+			productReference = 2E486F5B5950E22466B3FDBA7494B6E5 /* libPods-CallSourceNewObjCUITests.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		D4F918DA149E4B1F934D05CFE9C1EAF8 /* Pods-CallSourceNewObjC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D78E75078814174645F9AF42A8F7ADF3 /* Build configuration list for PBXNativeTarget "Pods-CallSourceNewObjC" */;
+			buildPhases = (
+				0280C5D2F138B8E21753516288E6397C /* Sources */,
+				81A29741811F5670258D2E7042F07B19 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0FC29140404020190DB6A667EB9FAAA6 /* PBXTargetDependency */,
+			);
+			name = "Pods-CallSourceNewObjC";
+			productName = "Pods-CallSourceNewObjC";
+			productReference = E383D854547CAA90C709A5C11B62A31E /* libPods-CallSourceNewObjC.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D41D8CD98F00B204E9800998ECF8427E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0830;
+				LastUpgradeCheck = 0700;
+			};
+			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
+			productRefGroup = 6B716C937422544B3A5BADCC820791A9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B431759576E0DCF29829F894949D1529 /* jetfire */,
+				D4F918DA149E4B1F934D05CFE9C1EAF8 /* Pods-CallSourceNewObjC */,
+				396940569BA3EE6EC3D1CAC7FC42DC20 /* Pods-CallSourceNewObjCTests */,
+				C0425D5D0B913F7F326A7DE4C242995A /* Pods-CallSourceNewObjCUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0280C5D2F138B8E21753516288E6397C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				96589B46C171501A3E61202702B54602 /* Pods-CallSourceNewObjC-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CF4902F29FF58DCACA5FB9DF220A6A30 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D072EABB11458050A57FC912F465773 /* Pods-CallSourceNewObjCUITests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED3C0590219878519E43E63D7321028D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A2256F6A88849A010A315E21BFD9A827 /* jetfire-dummy.m in Sources */,
+				7B0E71C977B02F49E6F0068C614867F2 /* JFRSecurity.m in Sources */,
+				779CB949F7C8AABDFBD2A770354630A3 /* JFRWebSocket.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EFBB220FE1ECBBA462DA2A567272CF13 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E2AC0DCE9CAC622C52308E20A5223548 /* Pods-CallSourceNewObjCTests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0FC29140404020190DB6A667EB9FAAA6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = jetfire;
+			target = B431759576E0DCF29829F894949D1529 /* jetfire */;
+			targetProxy = A524EAB29C740A33650970AB6BEBDCC4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4E487F173E6C9664F4E9E26B9635D23C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		70A825133D48D12BC4B26E8FA9CC4EAD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E9BD037303B777B166C137A8F7F92FAD /* Pods-CallSourceNewObjCTests.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACH_O_TYPE = staticlib;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		76C0BF8398469516B8F0898229E8DF09 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1FE13A223683C83570292849E28C780 /* Pods-CallSourceNewObjCUITests.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACH_O_TYPE = staticlib;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		7EC7B9C8B452D3BBD7BD50F5A59DF904 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AA20C8337A3F315272CA53A4B97B3138 /* Pods-CallSourceNewObjCUITests.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACH_O_TYPE = staticlib;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		8DE81CB73AC1715953C0FEA079A2666E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A237584D659F5E3F993B9D97D4472D6C /* Pods-CallSourceNewObjC.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACH_O_TYPE = staticlib;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		917069F840AAC3B5BA83E51991B72081 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0F7E888A8B11BDF19280927751873149 /* Pods-CallSourceNewObjC.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACH_O_TYPE = staticlib;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		99C05F0257694980E67E307B6755BF1A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4B8D47F7419E1804F547BCCF9DC50446 /* jetfire.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/jetfire/jetfire-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		A65B7EF38E5DA152EA539F75A2945F4F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4B8D47F7419E1804F547BCCF9DC50446 /* jetfire.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/jetfire/jetfire-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		BDD0139D6EB93FA375F887ABD62DAB2E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CC08056101796A9BADA99E274448F8BC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 47EE27ADB1DD6ADEEC39D7246490EBDF /* Pods-CallSourceNewObjCTests.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACH_O_TYPE = staticlib;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0AA063A3D20C7E986BA6A4742B15E6A1 /* Build configuration list for PBXNativeTarget "jetfire" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				99C05F0257694980E67E307B6755BF1A /* Debug */,
+				A65B7EF38E5DA152EA539F75A2945F4F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E487F173E6C9664F4E9E26B9635D23C /* Debug */,
+				BDD0139D6EB93FA375F887ABD62DAB2E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		72B41C6E5A1B3AFA2F7B6B51BB35DE2A /* Build configuration list for PBXNativeTarget "Pods-CallSourceNewObjCTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CC08056101796A9BADA99E274448F8BC /* Debug */,
+				70A825133D48D12BC4B26E8FA9CC4EAD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		79052C4A93F4AE0B3B68260AD76200E8 /* Build configuration list for PBXNativeTarget "Pods-CallSourceNewObjCUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7EC7B9C8B452D3BBD7BD50F5A59DF904 /* Debug */,
+				76C0BF8398469516B8F0898229E8DF09 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D78E75078814174645F9AF42A8F7ADF3 /* Build configuration list for PBXNativeTarget "Pods-CallSourceNewObjC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				917069F840AAC3B5BA83E51991B72081 /* Debug */,
+				8DE81CB73AC1715953C0FEA079A2666E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+}

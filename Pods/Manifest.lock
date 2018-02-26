@@ -1,0 +1,15 @@
+PODS:
+  - jetfire (0.1.5)
+  - libjingle_peerconnection (11177.2.0)
+
+DEPENDENCIES:
+  - jetfire
+  - libjingle_peerconnection
+
+SPEC CHECKSUMS:
+  jetfire: 60c16cd6ae0282928e24203eb93f03b89c1929ce
+  libjingle_peerconnection: 3458f646ddd61f08a9f3a0c43fb01fff5c165eb8
+
+PODFILE CHECKSUM: 1da612af7b1062a6a9ef671ec0391d0205d6d050
+
+COCOAPODS: 1.2.1
