@@ -16,6 +16,8 @@
 
 
 // https://tools.ietf.org/id/draft-ietf-behave-turn-08.html#sec-sendanddata  relayed addrs and server refl. addrs binding mechanism and TURN server esplanation
+
+// https://www.w3.org/TR/webrtc/#peer-to-peer-data-api   webrtc RTC Api;s and explan
 #import "WebRTC.h"
 
 #import <AVFoundation/AVFoundation.h>
@@ -761,6 +763,9 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
 - (void)peerConnection:(RTCPeerConnection *)peerConnection didOpenDataChannel:(RTCDataChannel *)dataChannel
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        int fd = dataChannel.streamId;
+//        RTCDataBuffer* buffer = [RTCDataBuffer alloc] initWithData:<#(NSData *)#> isBinary:<#(BOOL)#>
+//        dataChannel sendData:<#(RTCDataBuffer *)#>
         NSLog(@"peerConnection didOpenDataChannel?");
     });
 }

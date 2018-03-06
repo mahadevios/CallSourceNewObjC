@@ -57,6 +57,7 @@
 
 @property(nonatomic,strong) NSMutableArray* serverCredArray;
 //@property (nonatomic, strong) AVAudioPlayer *audioPlayer;
+@property (weak, nonatomic) IBOutlet UIButton *audioCallButton;
 
 - (IBAction)registerButtonClicked:(id)sender;
 - (IBAction)initPeerButtonClicked:(id)sender;
@@ -66,5 +67,6 @@
 - (IBAction)sendMessageButtonClicked:(id)sender;
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextFIeld;
 - (IBAction)resetButtonClicked:(id)sender;
+@property (weak, nonatomic) IBOutlet UILabel *callStatusLabel;
 @end
 

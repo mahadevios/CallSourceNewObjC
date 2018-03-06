@@ -22,16 +22,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mJy-tr-7lh">
-                                <rect key="frame" x="139" y="61" width="97" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="97" id="L3t-kr-Kfn"/>
-                                </constraints>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I6I-7v-MdZ">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I6I-7v-MdZ">
                                 <rect key="frame" x="29" y="318.5" width="30" height="30"/>
                                 <state key="normal" title="Init"/>
                                 <connections>
@@ -39,34 +30,35 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sWk-jI-iCL">
-                                <rect key="frame" x="259" y="318.5" width="72" height="30"/>
-                                <state key="normal" title="Init &amp; offer"/>
+                                <rect key="frame" x="124" y="318.5" width="127" height="30"/>
+                                <color key="backgroundColor" red="0.35888567570000002" green="0.6597889066" blue="0.1889341772" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                <color key="tintColor" red="0.96854275469999995" green="0.96868163350000003" blue="0.96851247549999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Make a Audio Call"/>
                                 <connections>
                                     <action selector="initOfferButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6cs-Q2-dxP"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aWe-Ar-Krz">
-                                <rect key="frame" x="167.5" y="318.5" width="39" height="30"/>
-                                <state key="normal" title="Reset"/>
-                                <connections>
-                                    <action selector="resetButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wuA-XK-D7o"/>
-                                </connections>
-                            </button>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Connecting" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q9N-kx-Qwz">
+                                <rect key="frame" x="157" y="80" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                <color key="textColor" red="0.36080178619999997" green="0.7219445109" blue="0.36225932840000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="I6I-7v-MdZ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="13" id="6Dx-EY-WeU"/>
-                            <constraint firstItem="mJy-tr-7lh" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="EwZ-1V-rlg"/>
+                            <constraint firstItem="q9N-kx-Qwz" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="60" id="Hwj-Zr-e09"/>
                             <constraint firstItem="I6I-7v-MdZ" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="KjG-Jl-9HJ"/>
-                            <constraint firstItem="aWe-Ar-Krz" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="c1v-Oh-veL"/>
+                            <constraint firstItem="sWk-jI-iCL" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="b1r-Ua-Dyu"/>
                             <constraint firstItem="sWk-jI-iCL" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="dnG-6M-UnX"/>
-                            <constraint firstItem="aWe-Ar-Krz" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="nMW-Wm-0oN"/>
-                            <constraint firstItem="mJy-tr-7lh" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="41" id="o9R-IF-s29"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="sWk-jI-iCL" secondAttribute="trailing" constant="28" id="tVf-gw-uf4"/>
+                            <constraint firstItem="q9N-kx-Qwz" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="pgZ-Dy-Qo8"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="usernameTextFIeld" destination="mJy-tr-7lh" id="ZmO-6O-9gI"/>
+                        <outlet property="audioCallButton" destination="sWk-jI-iCL" id="5h3-4N-Olc"/>
+                        <outlet property="callStatusLabel" destination="q9N-kx-Qwz" id="IqS-qd-vzQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

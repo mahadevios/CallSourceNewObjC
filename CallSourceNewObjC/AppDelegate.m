@@ -19,8 +19,20 @@
 {
     // Override point for customization after application launch.
     [RTCPeerConnectionFactory initializeSSL];
+    
     [self voipRegistration];
     
+//    self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+//    
+//    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+//    
+//    UIViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
+//    
+//    self.window.rootViewController = viewController;
+//    
+//    [self.window makeKeyAndVisible];
+//    
+//    return YES;
     //[RTCPeerConnectionFactory initialize];
     return YES;
 }

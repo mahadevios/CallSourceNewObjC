@@ -32,19 +32,35 @@
     
     iceCandidateGotFromServerArray = [NSMutableArray new];
 
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(setSDPGotFromServer:) name:NOTIFICATION_GET_SDP
-//                                               object:nil];
-//    
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(setCandidatesGotFromServer:) name:NOTIFICATION_GET_CANDIDATES
-//                                               object:nil];
         // Do any additional setup after loading the view, typically from a nib.
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(setICEServersGotFromXIR:) name:NOTIFICATION_GOT_TURN
                                                object:nil];
-    
+
     [[APIManager sharedManager] getICECredentials];
+    
+//    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
+//    {
+//        [self.audioCallButton setHidden:true];
+//
+//        self.tlk = [[TLKWebRTC alloc] init];
+//
+//        self.tlk.delegate = self;
+//
+//        [[NSNotificationCenter defaultCenter] addObserver:self.tlk
+//                                                 selector:@selector(setSDPGotFromServer:) name:NOTIFICATION_GET_SDP
+//                                                   object:nil];
+//
+//        [[NSNotificationCenter defaultCenter] addObserver:self.tlk
+//                                                 selector:@selector(setCandidatesGotFromServer:) name:NOTIFICATION_GET_CANDIDATES
+//                                                   object:nil];
+//
+//
+//        [self.tlk addPeerConnectionForID:@"iPad" iceServerArray:self.serverCredArray];
+//    }
+    
+    
+    
 }
 
 //-(void) setSDPGotFromServer:(NSNotification *)notification
@@ -430,42 +446,70 @@
 
 - (IBAction)commonSetupButtonClicked:(id)sender
 {
-     self.tlk = [[TLKWebRTC alloc] init];
-
-     self.tlk.delegate = self;
-
-    [[NSNotificationCenter defaultCenter] addObserver:self.tlk
-                                             selector:@selector(setSDPGotFromServer:) name:NOTIFICATION_GET_SDP
-                                               object:nil];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self.tlk
-                                             selector:@selector(setCandidatesGotFromServer:) name:NOTIFICATION_GET_CANDIDATES
-                                               object:nil];
-
-   
-    [self.tlk addPeerConnectionForID:@"iPad" iceServerArray:self.serverCredArray];
+//     self.tlk = [[TLKWebRTC alloc] init];
+//
+//     self.tlk.delegate = self;
+//
+//    [[NSNotificationCenter defaultCenter] addObserver:self.tlk
+//                                             selector:@selector(setSDPGotFromServer:) name:NOTIFICATION_GET_SDP
+//                                               object:nil];
+//
+//    [[NSNotificationCenter defaultCenter] addObserver:self.tlk
+//                                             selector:@selector(setCandidatesGotFromServer:) name:NOTIFICATION_GET_CANDIDATES
+//                                               object:nil];
+//
+//
+//    [self.tlk addPeerConnectionForID:@"iPad" iceServerArray:self.serverCredArray];
 }
 
 - (IBAction)initOfferButtonClicked:(id)sender
 {
-    self.tlk = [[TLKWebRTC alloc] init];
-    
-    self.tlk.delegate = self;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self.tlk
-                                             selector:@selector(setSDPGotFromServer:) name:NOTIFICATION_GET_SDP
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self.tlk
-                                             selector:@selector(setCandidatesGotFromServer:) name:NOTIFICATION_GET_CANDIDATES
-                                               object:nil];
-    
+    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
+    {
+        [self.audioCallButton setHidden:true];
+        
+        self.tlk = [[TLKWebRTC alloc] init];
+        
+        self.tlk.delegate = self;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self.tlk
+                                                 selector:@selector(setSDPGotFromServer:) name:NOTIFICATION_GET_SDP
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self.tlk
+                                                 selector:@selector(setCandidatesGotFromServer:) name:NOTIFICATION_GET_CANDIDATES
+                                                   object:nil];
+        
+        
+        [self.tlk addPeerConnectionForID:@"iPad" iceServerArray:self.serverCredArray];
+    }
+    else
+    {
+        self.tlk = [[TLKWebRTC alloc] init];
+        
+        self.tlk.delegate = self;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self.tlk
+                                                 selector:@selector(setSDPGotFromServer:) name:NOTIFICATION_GET_SDP
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self.tlk
+                                                 selector:@selector(setCandidatesGotFromServer:) name:NOTIFICATION_GET_CANDIDATES
+                                                   object:nil];
+        
+        
+        [self.tlk addPeerConnectionForID:@"iPhone" iceServerArray:self.serverCredArray];
+        
+        // [self.tlk initDataChannel:@"iPhone"];
+        
+        [self.tlk createOfferForPeerWithID:@"iPhone"];
+        
+        self.callStatusLabel.hidden = NO;
+        
+        self.callStatusLabel.text = @"Connecting..";
+    }
    
-    [self.tlk addPeerConnectionForID:@"iPhone" iceServerArray:self.serverCredArray];
     
-   // [self.tlk initDataChannel:@"iPhone"];
-    
-    [self.tlk createOfferForPeerWithID:@"iPhone"];
 }
 
 -(void) setICEServersGotFromXIR:(NSNotification *)notification
@@ -633,6 +677,14 @@
 
 - (void)webRTC:(TLKWebRTC *)webRTC didObserveICEConnectionStateChange:(RTCICEConnectionState)state forPeerWithID:(NSString *)peerID
 {
+    if (state == 2)
+    {
+        self.callStatusLabel.hidden = NO;
+        
+        self.callStatusLabel.text = @"Connected";
+        
+        
+    }
     NSLog(@"my state = %d", state);
     
     NSLog(@"my id = %@", peerID);

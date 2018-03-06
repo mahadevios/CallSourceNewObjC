@@ -21,6 +21,17 @@
 // https://tools.ietf.org/id/draft-ietf-behave-turn-08.html#sec-sendanddata  relayed addrs and server refl. addrs binding mechanism and TURN server esplanation
 
 //https://xirsys.com/terms/
+
+// MultipeerConnectivity
+
+
+// https://groups.google.com/forum/#!msg/kurento/wN4wM4NIMI4/xjEs1KwmOw0J  kurrento group link
+
+// https://tools.ietf.org/html/draft-ietf-mmusic-trickle-ice-02 // add trickle support
+
+// https://www.webrtc-experiment.com/docs/how-to-WebRTC-video-conferencing.html  multi user offer answer
+
+// https://webrtchacks.com/limit-webrtc-bandwidth-sdp/  update sdp
 #import "TLKWebRTC.h"
 
 #import <AVFoundation/AVFoundation.h>
@@ -70,10 +81,13 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
 
 #pragma mark - object lifecycle
 
-- (instancetype)initWithVideoDevice:(AVCaptureDevice *)device {
+- (instancetype)initWithVideoDevice:(AVCaptureDevice *)device
+{
     self = [super init];
-    if (self) {
-        if (device) {
+    if (self)
+    {
+        if (device)
+        {
             _allowVideo = YES;
             _videoDevice = device;
         }
@@ -82,10 +96,12 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
     return self;
 }
 
-- (instancetype)initWithVideo:(BOOL)allowVideo {
+- (instancetype)initWithVideo:(BOOL)allowVideo
+{
     // Set front camera as the default device
     AVCaptureDevice* frontCamera;
-    if (allowVideo) {
+    if (allowVideo)
+    {
         frontCamera = [[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo] lastObject];
     }
     return [self initWithVideoDevice:frontCamera];
@@ -102,14 +118,13 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
 
 -(void) setSDPGotFromServer:(NSNotification *)notification
 {
-    // check for signaling state also
-    
-    //dispatch_async(dispatch_get_main_queue(), ^{
     
     NSDictionary* dic = notification.object;
     
     NSDictionary* apsDict = [dic objectForKey:@"aps"];
+    
     [apsDict valueForKey:@"alert"];
+    
     NSString* sdp =[apsDict objectForKey:@"alert"];
     
     NSRange uFragTagRange = [sdp rangeOfString:@"a=ice-ufrag:"];
@@ -118,7 +133,6 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
     
     NSRange fingerPringTagRange = [sdp rangeOfString:@"a=fingerprint:"];
 
-    
     int ufragTotalLength = pwdTagRange.location-uFragTagRange.location-1;
   
     NSRange uFragRange = NSMakeRange(uFragTagRange.location, ufragTotalLength);
@@ -128,7 +142,6 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
     NSString* ufragReplaceString = [uFragTotalSubString stringByReplacingOccurrencesOfString:@" " withString:@"+"];
     
     sdp = [sdp stringByReplacingCharactersInRange:uFragRange withString:ufragReplaceString];
-    
     
     int pwdTotalLength = fingerPringTagRange.location-pwdTagRange.location-1;
     
@@ -140,20 +153,46 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
     
     sdp = [sdp stringByReplacingCharactersInRange:pwdRange withString:replacepwdString];
     
+    NSMutableString *sdp1 = [NSMutableString stringWithString:sdp];
+
+
+   // [sdp1 insertString:@"a=ice-options:trickle\r" atIndex:fingerPringTagRange.location];
+
+    //NSString* updatedSDP = [sdp.description stringByAppendingString:@"a=ice-options:trickle"];
+//
+    NSRange candidateTagRange = [sdp rangeOfString:@"a=candidate:"];
     
-    NSLog(@"Got new SDP from Noti.= %@", sdp);
+    if (candidateTagRange.length > 0)
+    {
+        NSRange uFragTagRange = [sdp rangeOfString:@"a=ice-ufrag:"];
+        
+        int candidateTotalLength = uFragTagRange.location-candidateTagRange.location-1;
+        
+        NSRange candiateNewRange = NSMakeRange(candidateTagRange.location, candidateTotalLength);
+        
+        [sdp1 stringByReplacingCharactersInRange:candiateNewRange withString:@""];
+    }
     
+    NSLog(@"Got new SDP from Noti.= %@", sdp1);
+    
+//    NSArray* keys = [self.peerConnections allKeysForObject:peerConnection];
+//    
+//    NSString* role = [self.peerToRoleMap objectForKey:keys[0]];
+//    if (role == TLKPeerConnectionRoleReceiver)
+//    {
+//        
+//    }
     
     if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
     {
-        RTCSessionDescription *remoteDesc = [[RTCSessionDescription alloc] initWithType:@"offer" sdp:sdp];
+        RTCSessionDescription *remoteDesc = [[RTCSessionDescription alloc] initWithType:@"offer" sdp:sdp1];
         
         [self setRemoteDescription:remoteDesc forPeerWithID:@"iPad" receiver:true];
         
     }
     else
     {
-        RTCSessionDescription *remoteDesc = [[RTCSessionDescription alloc] initWithType:@"answer" sdp:sdp];
+        RTCSessionDescription *remoteDesc = [[RTCSessionDescription alloc] initWithType:@"answer" sdp:sdp1];
         
         [self setRemoteDescription:remoteDesc forPeerWithID:@"iPhone" receiver:false];
         
@@ -259,6 +298,7 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
             
             NSLog(@"Got new Canidate from Noti. =%@", candidate);
 
+            
             [self addICECandidate:candidate forPeerWithID:@"iPhone"];
             
         }
@@ -277,14 +317,14 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
     
     self.iceServers = [NSMutableArray new];
     
-    RTCICEServer *defaultStunServer = [[RTCICEServer alloc] initWithURI:[NSURL URLWithString:TLKWebRTCSTUNHostname2] username:@"" password:@""];
+//    RTCICEServer *defaultTurnServer = [[RTCICEServer alloc] initWithURI:[NSURL URLWithString:TLKWebRTCSTUNHostname2] username:@"" password:@""];
 
-   // RTCICEServer *defaultTurnServer = [[RTCICEServer alloc] initWithURI:[NSURL URLWithString:TLKWebRTCSTUNHostname2] username:@"mahadevmandale@yahoo.com" password:@"Mahadev7"];
-
-//    RTCICEServer *defaultTurnServer = [[RTCICEServer alloc] initWithURI:[NSURL URLWithString:TLKWebRTCSTUNHostname2] username:@"297e711a-17d0-11e8-94b2-8881540efb1e" password:@"297e71ce-17d0-11e8-b560-7980d1185d80"];
-
+//    RTCICEServer *defaultTurnServer = [[RTCICEServer alloc] initWithURI:[NSURL URLWithString:TLKWebRTCSTUNHostname2] username:@"mahadevmandale@yahoo.com" password:@"Mahadev7"];
+//
+////    RTCICEServer *defaultTurnServer = [[RTCICEServer alloc] initWithURI:[NSURL URLWithString:TLKWebRTCSTUNHostname2] username:@"297e711a-17d0-11e8-94b2-8881540efb1e" password:@"297e71ce-17d0-11e8-b560-7980d1185d80"];
+//
+////    [self.iceServers addObject:defaultTurnServer];
 //    [self.iceServers addObject:defaultTurnServer];
-    [self.iceServers addObject:defaultStunServer];
 
     [RTCPeerConnectionFactory initializeSSL];
     
@@ -312,6 +352,10 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
     RTCPair *videoConstraint = [[RTCPair alloc] initWithKey:@"OfferToReceiveVideo" value:self.allowVideo ? @"true" : @"false"];
     RTCPair *sctpConstraint = [[RTCPair alloc] initWithKey:@"internalSctpDataChannels" value:@"true"];
     RTCPair *dtlsConstraint = [[RTCPair alloc] initWithKey:@"DtlsSrtpKeyAgreement" value:@"true"];
+//    RTCPair *dtlsConstraint1 = [[RTCPair alloc] initWithKey:@"a=transport_options" value:@"trickle"];
+
+    
+ 
     
     return [[RTCMediaConstraints alloc] initWithMandatoryConstraints:@[audioConstraint, videoConstraint] optionalConstraints:@[sctpConstraint, dtlsConstraint]];
 }
@@ -342,25 +386,25 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
 {
     self.XIRiceServerArray = iceServerArray;
     
-//    for (NSDictionary* serverCredDict in self.XIRiceServerArray)
-//    {
-//        NSString* url = [serverCredDict valueForKey:@"url"];
-//        NSString* username = [serverCredDict valueForKey:@"username"];
-//        NSString* credential = [serverCredDict valueForKey:@"credential"];
-//
-//        if (username == nil)
-//        {
-//            username = @"";
-//        }
-//        if (credential == nil)
-//        {
-//            credential = @"";
-//        }
-//        RTCICEServer *defaultTurnServer = [[RTCICEServer alloc] initWithURI:[NSURL URLWithString:url] username:username password:credential];
-//
-//
-//        [self.iceServers addObject:defaultTurnServer];
-//    }
+    for (NSDictionary* serverCredDict in self.XIRiceServerArray)
+    {
+        NSString* url = [serverCredDict valueForKey:@"url"];
+        NSString* username = [serverCredDict valueForKey:@"username"];
+        NSString* credential = [serverCredDict valueForKey:@"credential"];
+
+        if (username == nil)
+        {
+            username = @"";
+        }
+        if (credential == nil)
+        {
+            credential = @"";
+        }
+        RTCICEServer *defaultTurnServer = [[RTCICEServer alloc] initWithURI:[NSURL URLWithString:url] username:username password:credential];
+
+
+        [self.iceServers addObject:defaultTurnServer];
+    }
     
     RTCPeerConnection *peer = [self.peerFactory peerConnectionWithICEServers:[self iceServers] constraints:[self _mediaConstraints] delegate:self];
     [peer addStream:self.localMediaStream];
@@ -390,7 +434,10 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
     {
         [self.peerToRoleMap setObject:TLKPeerConnectionRoleReceiver forKey:peerID];
     }
+
     [peerConnection setRemoteDescriptionWithDelegate:self sessionDescription:remoteSDP];
+    
+    
 }
 
 - (void)addICECandidate:(RTCICECandidate*)candidate forPeerWithID:(NSString *)peerID {
@@ -407,9 +454,27 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
         NSLog(@"candidate added to stack from Noti");
     } else
     {
+    
+//        if (peerConnection.remoteDescription == nil)
+//        {
+//            [self.iceCandidateDictArray addObject:candidate];
+//        }
+//        else
+//        {
+//            for (RTCICECandidate* candidate in self.iceCandidateDictArray)
+//            {
+//                [peerConnection addICECandidate:candidate];
+//
+//                NSLog(@"candidate added from array");
+//            }
+//            [self.iceCandidateDictArray removeAllObjects];
+
+            [peerConnection addICECandidate:candidate];
+            
+            NSLog(@"candidate added directly from Noti");
+//        }
         
-        [peerConnection addICECandidate:candidate];
-        NSLog(@"candidate added directly from Noti");
+        
         
     }
 }
@@ -419,20 +484,69 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
 // Note: all these delegate calls come back on a random background thread inside WebRTC,
 // so all are bridged across to the main thread
 
-- (void)peerConnection:(RTCPeerConnection *)peerConnection didCreateSessionDescription:(RTCSessionDescription *)sdp error:(NSError *)error {
+- (void)peerConnection:(RTCPeerConnection *)peerConnection didCreateSessionDescription:(RTCSessionDescription *)originalSdp error:(NSError *)error {
     dispatch_async(dispatch_get_main_queue(), ^{
-        RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:sdp.type sdp:sdp.description];
         
+//        NSString* updatedSDP = [sdp.description stringByAppendingString:@"a=ice-options:trickle"];
+        
+//        RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:sdp.type sdp:updatedSDP];
+        NSString* sdp = originalSdp.description;
+//
+//        NSRange mAudioTagRange = [sdp rangeOfString:@"m=audio "];
+//
+//        NSRange cInTagRange = [sdp rangeOfString:@"c=IN "];
+//
+//
+//        int mAudioTotalLength = cInTagRange.location-mAudioTagRange.location-1;
+//
+//
+//        //NSRange mAudioRange = NSMakeRange(mAudioTagRange.location, mAudioTotalLength);
+//
+//
+//        //NSString* newMAudioString = @"m=audio 1 RTP/AVP 0 96\r";
+//
+//        //sdp = [sdp stringByReplacingCharactersInRange:mAudioRange withString:newMAudioString];
+//
+//        NSString* newCInString = @"c=IN IP4 0.0.0.0\r";
+//
+//        NSRange cInTagRange1 = [sdp rangeOfString:@"c=IN "];
+//
+//        NSRange aRTCPSampleRange = [sdp rangeOfString:@"a=rtcp:"];
+//
+//        int cInTotalLength = aRTCPSampleRange.location-cInTagRange1.location-1;
+//
+//
+//        NSRange cInRange = NSMakeRange(cInTagRange1.location, cInTotalLength);
+//
+//        sdp = [sdp stringByReplacingCharactersInRange:cInRange withString:newCInString];
+//
+//        NSRange fingerPringTagRange = [sdp rangeOfString:@"a=fingerprint:"];
+//
+//        NSMutableString *sdp1 = [NSMutableString stringWithString:sdp];
+//
+//
+//
+//        //  [sdp1 insertString:@"a=ice-options:trickle\r\r" atIndex:fingerPringTagRange.location];
+//
+////        [sdp1 insertString:@"\ra=end-of-candidates\r" atIndex:fingerPringTagRange.location];
+//
+//        [sdp1 insertString:@"a=ice-options:trickle\r" atIndex:fingerPringTagRange.location];
+        
+        RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:originalSdp.type sdp:sdp];
         
         [peerConnection setLocalDescriptionWithDelegate:self sessionDescription:sessionDescription];
+        
+        
     });
 }
+
 
 - (void)peerConnection:(RTCPeerConnection *)peerConnection didSetSessionDescriptionWithError:(NSError *)error {
     
     dispatch_async(dispatch_get_main_queue(), ^{
         if (peerConnection.iceGatheringState == RTCICEGatheringGathering)
         {
+        
             NSArray *keys = [self.peerConnections allKeysForObject:peerConnection];
             if ([keys count] > 0)
             {
@@ -447,27 +561,115 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
             }
         }
         
-        if (peerConnection.signalingState == RTCSignalingHaveLocalOffer) {
+        if (peerConnection.signalingState == RTCSignalingHaveLocalOffer)
+        {
             NSArray *keys = [self.peerConnections allKeysForObject:peerConnection];
             if ([keys count] > 0)
             {
+                NSString* sdp = peerConnection.localDescription.description;
+//
+               
+                //NSRange iceTagRange = [sdp rangeOfString:@"a=fingerprint:"];
+
+                NSString* modifiedSDP = [self modifySDP:sdp];
                 
-                [self.delegate webRTC:self didSendSDPOffer:peerConnection.localDescription forPeerWithID:keys[0]];
+                //[peerConnection.localDescription setValue:@"trickle" forKey:@"a=ice-options"];
+               // [peerConnection.localDescription setValue:@"-" forUndefinedKey:@"s"];
+               // [peerConnection.localDescription setValue:@"trickle" forKey:@"a=ice-options"];
+                
+                
+                 RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:peerConnection.localDescription.type sdp:modifiedSDP];
+//                [self.delegate webRTC:self didSendSDPOffer:peerConnection.localDescription forPeerWithID:keys[0]];
+                [self.delegate webRTC:self didSendSDPOffer:sessionDescription forPeerWithID:keys[0]];
+
             }
-        } else if (peerConnection.signalingState == RTCSignalingHaveRemoteOffer) {
+        }
+        else if (peerConnection.signalingState == RTCSignalingHaveRemoteOffer)
+        {
             [peerConnection createAnswerWithDelegate:self constraints:[self _mediaConstraints]];
-        } else if (peerConnection.signalingState == RTCSignalingStable) {
+        }
+        else if (peerConnection.signalingState == RTCSignalingStable)
+        {
             NSArray* keys = [self.peerConnections allKeysForObject:peerConnection];
-            if ([keys count] > 0) {
+            if ([keys count] > 0)
+            {
                 NSString* role = [self.peerToRoleMap objectForKey:keys[0]];
-                if (role == TLKPeerConnectionRoleReceiver) {
-                    [self.delegate webRTC:self didSendSDPAnswer:peerConnection.localDescription forPeerWithID:keys[0]];
+                if (role == TLKPeerConnectionRoleReceiver)
+                {
+                    
+                    //NSLog(@"Answer desc = %@",peerConnection.localDescription);
+                    
+                    NSString* modifiedSDP = [self modifySDP:peerConnection.localDescription.description];
+                    
+                    RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:peerConnection.localDescription.type sdp:modifiedSDP];
+                    
+                    [self.delegate webRTC:self didSendSDPAnswer:sessionDescription forPeerWithID:keys[0]];
                 }
+               
             }
         }
     });
 }
 
+
+-(NSString* )modifySDP:(NSString*)sdp
+{
+    
+            NSRange mAudioTagRange = [sdp rangeOfString:@"m=audio "];
+
+            NSRange cInTagRange = [sdp rangeOfString:@"c=IN "];
+
+
+            int mAudioTotalLength = cInTagRange.location-mAudioTagRange.location-1;
+
+            NSString* newCInString = @"c=IN IP4 0.0.0.0\r";
+
+            NSRange cInTagRange1 = [sdp rangeOfString:@"c=IN "];
+
+            NSRange aRTCPSampleRange = [sdp rangeOfString:@"a=rtcp:"];
+
+            int cInTotalLength = aRTCPSampleRange.location-cInTagRange1.location-1;
+
+
+            NSRange cInRange = NSMakeRange(cInTagRange1.location, cInTotalLength);
+
+            sdp = [sdp stringByReplacingCharactersInRange:cInRange withString:newCInString];
+
+            NSRange fingerPringTagRange = [sdp rangeOfString:@"a=fingerprint:"];
+//
+//            NSRange setUpTagRange = [sdp rangeOfString:@"a=setup:"];
+    
+            NSMutableString *sdp1 = [[NSMutableString alloc] initWithString:sdp];
+    
+            NSRange candidateTagRange = [sdp rangeOfString:@"a=candidate:"];
+
+            if (candidateTagRange.length > 0)
+            {
+                NSRange uFragTagRange = [sdp rangeOfString:@"a=ice-ufrag:"];
+                
+                int candidateTotalLength = uFragTagRange.location-candidateTagRange.location-1;
+                
+                NSRange candiateNewRange = NSMakeRange(candidateTagRange.location, candidateTotalLength);
+                
+                [sdp1 stringByReplacingCharactersInRange:candiateNewRange withString:@""];
+            }
+    
+    
+            //  [sdp1 insertString:@"a=ice-options:trickle\r\r" atIndex:fingerPringTagRange.location];
+    
+           // sdp1 = [sdp1 stringByAppendingString:@"\ra=end-of-candidates\r"];
+    
+            //sdp1 = [sdp1 stringByAppendingString:@"a=ice-options:trickle\n"];
+    
+           // sdp1 = [sdp1 stringByAppendingString:@"a=end-of-candidates\n"];
+
+            //[sdp1 insertString:@"\ra=end-of-candidates\r" atIndex:fingerPringTagRange.location];
+    
+            [sdp1 insertString:@"a=ice-options:trickle\n" atIndex:fingerPringTagRange.location];
+    
+            return sdp1;
+    
+}
 #pragma mark - String utilities
 
 - (NSString *)stringForSignalingState:(RTCSignalingState)state {
@@ -575,6 +777,10 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
     dispatch_async(dispatch_get_main_queue(), ^{
         //    [self.peerConnection createOfferWithDelegate:self constraints:[self mediaConstraints]];
         // Is this delegate called when creating a PC that is going to *receive* an offer and return an answer?
+//        if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone )
+//        {
+//            [peerConnection createOfferWithDelegate:self constraints:[self _mediaConstraints]];
+//        }
         NSLog(@"peerConnectionOnRenegotiationNeeded ?");
     });
 }
@@ -587,7 +793,35 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
 
 - (void)peerConnection:(RTCPeerConnection *)peerConnection iceGatheringChanged:(RTCICEGatheringState)newState {
     dispatch_async(dispatch_get_main_queue(), ^{
+        
         NSLog(@"peerConnection iceGatheringChanged?");
+        
+        if (newState == RTCICEGatheringComplete)
+        {
+            if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone )
+            {
+                //[peerConnection createOfferWithDelegate:self constraints:[self _mediaConstraints]];
+            }
+            else
+            {
+                NSArray* keys = [self.peerConnections allKeysForObject:peerConnection];
+                if ([keys count] > 0)
+                {
+                    NSString* role = [self.peerToRoleMap objectForKey:keys[0]];
+                    if (role == TLKPeerConnectionRoleReceiver)
+                    {
+                        
+                        //NSLog(@"Answer desc = %@",peerConnection.localDescription);
+                        
+                        
+                           //  [self.delegate webRTC:self didSendSDPAnswer:peerConnection.localDescription forPeerWithID:keys[0]];
+                       
+                    }
+                    
+                }
+            }
+        }
+        
     });
 }
 
@@ -598,7 +832,11 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
         if ([keys count] > 0) {
             //[self performSelector:@selector(sendICE:) withObject:candidate afterDelay:5];
             //NSLog(@"Got candiate in delegate = %@",candidate);
-            
+            //[self.iceCandidateDictArray addObject:candidate];
+//            if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone )
+//            {
+//                [peerConnection createOfferWithDelegate:self constraints:[self _mediaConstraints]];
+//            }
             [self.delegate webRTC:self didSendICECandidate:candidate forPeerWithID:keys[0]];
         }
     });
