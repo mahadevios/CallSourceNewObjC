@@ -26,7 +26,9 @@
 //#define  BASE_URL_PATH                  @"http://115.249.195.23:8080/Communicator/feedcom"  //live server
 //#define  BASE_URL_PATH                  @"http://115.249.195.23:9090/Communicator/feedcom/"  //live server
 
-#define  BASE_URL_PATH                  @"http://192.168.3.75:9090/coreflex/feedcom"
+//#define  BASE_URL_PATH                  @"http://192.168.3.75:9090/coreflex/feedcom"
+#define  BASE_URL_PATH                  @"https://callsourcecommunicator.com:8080/coreflex/feedcom"
+
 //#define  BASE_URL_PATH                  @"http://192.168.3.165:8080/coreflex/feedcom"
 //#define  BASE_URL_PATH                  @"http://192.168.3.74:9090/coreflex/feedcom"
 //#define  BASE_URL_PATH                    @"http://184.171.162.251:8080/Call_Source_Dev/feedcom" // live callsource

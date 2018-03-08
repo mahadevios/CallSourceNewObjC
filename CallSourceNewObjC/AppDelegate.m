@@ -96,7 +96,7 @@
     deviceToken = [deviceToken stringByReplacingOccurrencesOfString:@">" withString:@""];
     deviceToken = [deviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
 
-    //[[APIManager sharedManager] updateDevieTokenUsername:@"iPhone" andDeviceId:deviceToken];
+    [[APIManager sharedManager] updateDevieTokenUsername:@"iPhone" andDeviceId:deviceToken];
     
     //[[APIManager sharedManager] updateDevieTokenUsername:@"iPad" andDeviceId:deviceToken];
 

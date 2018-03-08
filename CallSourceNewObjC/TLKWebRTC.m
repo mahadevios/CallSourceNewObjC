@@ -112,6 +112,8 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
     // Use default device
     self.iceCandidateDictArray = [NSMutableArray new];
     
+    self.cachedCandidateToSendArray = [NSMutableArray new];
+    
     return [self initWithVideo:NO];
 }
 
@@ -160,18 +162,18 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
 
     //NSString* updatedSDP = [sdp.description stringByAppendingString:@"a=ice-options:trickle"];
 //
-    NSRange candidateTagRange = [sdp rangeOfString:@"a=candidate:"];
-    
-    if (candidateTagRange.length > 0)
-    {
-        NSRange uFragTagRange = [sdp rangeOfString:@"a=ice-ufrag:"];
-        
-        int candidateTotalLength = uFragTagRange.location-candidateTagRange.location-1;
-        
-        NSRange candiateNewRange = NSMakeRange(candidateTagRange.location, candidateTotalLength);
-        
-        [sdp1 stringByReplacingCharactersInRange:candiateNewRange withString:@""];
-    }
+//    NSRange candidateTagRange = [sdp rangeOfString:@"a=candidate:"];
+//
+//    if (candidateTagRange.length > 0)
+//    {
+//        NSRange uFragTagRange = [sdp rangeOfString:@"a=ice-ufrag:"];
+//
+//        int candidateTotalLength = uFragTagRange.location-candidateTagRange.location-1;
+//
+//        NSRange candiateNewRange = NSMakeRange(candidateTagRange.location, candidateTotalLength);
+//
+//        sdp1 = [sdp1 stringByReplacingCharactersInRange:candiateNewRange withString:@""];
+//    }
     
     NSLog(@"Got new SDP from Noti.= %@", sdp1);
     
@@ -193,6 +195,10 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
     else
     {
         RTCSessionDescription *remoteDesc = [[RTCSessionDescription alloc] initWithType:@"answer" sdp:sdp1];
+        
+//        RTCPeerConnection *peerConnection = [self.peerConnections objectForKey:@"iPhone"];
+//
+//        [peerConnection setLocalDescriptionWithDelegate:self sessionDescription:remoteDesc];
         
         [self setRemoteDescription:remoteDesc forPeerWithID:@"iPhone" receiver:false];
         
@@ -352,7 +358,7 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
     RTCPair *videoConstraint = [[RTCPair alloc] initWithKey:@"OfferToReceiveVideo" value:self.allowVideo ? @"true" : @"false"];
     RTCPair *sctpConstraint = [[RTCPair alloc] initWithKey:@"internalSctpDataChannels" value:@"true"];
     RTCPair *dtlsConstraint = [[RTCPair alloc] initWithKey:@"DtlsSrtpKeyAgreement" value:@"true"];
-//    RTCPair *dtlsConstraint1 = [[RTCPair alloc] initWithKey:@"a=transport_options" value:@"trickle"];
+    //RTCPair *dtlsConstraint1 = [[RTCPair alloc] initWithKey:@"rtcpMuxPolicy" value:@"require"];
 
     
  
@@ -406,7 +412,15 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
         [self.iceServers addObject:defaultTurnServer];
     }
     
-    RTCPeerConnection *peer = [self.peerFactory peerConnectionWithICEServers:[self iceServers] constraints:[self _mediaConstraints] delegate:self];
+//    RTCPeerConnection *peer = [self.peerFactory peerConnectionWithICEServers:[self iceServers] constraints:[self _mediaConstraints] delegate:self];
+    
+    
+    RTCConfiguration *conf = [[RTCConfiguration alloc] initWithIceTransportsType:kRTCIceTransportsTypeAll bundlePolicy:kRTCBundlePolicyBalanced rtcpMuxPolicy:kRTCRtcpMuxPolicyRequire tcpCandidatePolicy:kRTCTcpCandidatePolicyEnabled audioJitterBufferMaxPackets:50 iceConnectionReceivingTimeout:1 iceBackupCandidatePairPingInterval:2];
+    
+    conf.iceServers = [self iceServers];
+    
+    RTCPeerConnection *peer = [self.peerFactory peerConnectionWithConfiguration:conf constraints:[self _mediaConstraints] delegate:self];
+    
     [peer addStream:self.localMediaStream];
     
     [self.peerConnections setObject:peer forKey:identifier];
@@ -440,7 +454,8 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
     
 }
 
-- (void)addICECandidate:(RTCICECandidate*)candidate forPeerWithID:(NSString *)peerID {
+- (void)addICECandidate:(RTCICECandidate*)candidate forPeerWithID:(NSString *)peerID
+{
     RTCPeerConnection *peerConnection = [self.peerConnections objectForKey:peerID];
     
     if (peerConnection.iceGatheringState == RTCICEGatheringNew)
@@ -455,24 +470,27 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
     } else
     {
     
-//        if (peerConnection.remoteDescription == nil)
-//        {
-//            [self.iceCandidateDictArray addObject:candidate];
-//        }
-//        else
-//        {
-//            for (RTCICECandidate* candidate in self.iceCandidateDictArray)
-//            {
-//                [peerConnection addICECandidate:candidate];
-//
-//                NSLog(@"candidate added from array");
-//            }
-//            [self.iceCandidateDictArray removeAllObjects];
+        if (peerConnection.remoteDescription == nil)
+        {
+            [self.iceCandidateDictArray addObject:candidate];
+        }
+        else
+        {
+            for (RTCICECandidate* candidate in self.iceCandidateDictArray)
+            {
+                [peerConnection addICECandidate:candidate];
+
+                NSLog(@"candidate added from array");
+            }
+            [self.iceCandidateDictArray removeAllObjects];
 
             [peerConnection addICECandidate:candidate];
-            
+        
+    
             NSLog(@"candidate added directly from Noti");
-//        }
+        
+            NSLog(@"remote desc after cand. addn = %@", peerConnection.remoteDescription.description) ;
+        }
         
         
         
@@ -490,7 +508,7 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
 //        NSString* updatedSDP = [sdp.description stringByAppendingString:@"a=ice-options:trickle"];
         
 //        RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:sdp.type sdp:updatedSDP];
-        NSString* sdp = originalSdp.description;
+        //NSString* sdp = originalSdp.description;
 //
 //        NSRange mAudioTagRange = [sdp rangeOfString:@"m=audio "];
 //
@@ -532,7 +550,7 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
 //
 //        [sdp1 insertString:@"a=ice-options:trickle\r" atIndex:fingerPringTagRange.location];
         
-        RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:originalSdp.type sdp:sdp];
+        RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:originalSdp.type sdp:originalSdp.description];
         
         [peerConnection setLocalDescriptionWithDelegate:self sessionDescription:sessionDescription];
         
@@ -603,7 +621,10 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
                     
                     RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:peerConnection.localDescription.type sdp:modifiedSDP];
                     
-                    [self.delegate webRTC:self didSendSDPAnswer:sessionDescription forPeerWithID:keys[0]];
+                    
+//                    [peerConnection setLocalDescriptionWithDelegate:self sessionDescription:sessionDescription];
+                    
+                   // [self.delegate webRTC:self didSendSDPAnswer:sessionDescription forPeerWithID:keys[0]];
                 }
                
             }
@@ -615,44 +636,51 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
 -(NSString* )modifySDP:(NSString*)sdp
 {
     
-            NSRange mAudioTagRange = [sdp rangeOfString:@"m=audio "];
-
-            NSRange cInTagRange = [sdp rangeOfString:@"c=IN "];
-
-
-            int mAudioTotalLength = cInTagRange.location-mAudioTagRange.location-1;
-
-            NSString* newCInString = @"c=IN IP4 0.0.0.0\r";
-
-            NSRange cInTagRange1 = [sdp rangeOfString:@"c=IN "];
-
-            NSRange aRTCPSampleRange = [sdp rangeOfString:@"a=rtcp:"];
-
-            int cInTotalLength = aRTCPSampleRange.location-cInTagRange1.location-1;
-
-
-            NSRange cInRange = NSMakeRange(cInTagRange1.location, cInTotalLength);
-
-            sdp = [sdp stringByReplacingCharactersInRange:cInRange withString:newCInString];
-
+//            NSRange mAudioTagRange = [sdp rangeOfString:@"m=audio "];
+//
+//            NSRange cInTagRange = [sdp rangeOfString:@"c=IN "];
+//
+//
+//            int mAudioTotalLength = cInTagRange.location-mAudioTagRange.location-1;
+//
+//            NSString* newCInString = @"a=rtcp:9 IN IP4 0.0.0.0";
+////
+////
+//            NSRange aRTCPSampleRange = [sdp rangeOfString:@"a=rtcp:"];
+////
+//        NSRange candidateRange1 = [sdp rangeOfString:@"a=candidate:"];
+//
+//            if (candidateRange1.length > 0)
+//            {
+//
+//                int rtcpTotalLength = candidateRange1.location-aRTCPSampleRange.location-1;
+//                //
+//                //
+//                NSRange cInRange = NSMakeRange(aRTCPSampleRange.location, rtcpTotalLength);
+//                //
+//                sdp = [sdp stringByReplacingCharactersInRange:cInRange withString:newCInString];
+//            }
+    
+//
             NSRange fingerPringTagRange = [sdp rangeOfString:@"a=fingerprint:"];
 //
 //            NSRange setUpTagRange = [sdp rangeOfString:@"a=setup:"];
     
+   
             NSMutableString *sdp1 = [[NSMutableString alloc] initWithString:sdp];
     
-            NSRange candidateTagRange = [sdp rangeOfString:@"a=candidate:"];
-
-            if (candidateTagRange.length > 0)
-            {
-                NSRange uFragTagRange = [sdp rangeOfString:@"a=ice-ufrag:"];
-                
-                int candidateTotalLength = uFragTagRange.location-candidateTagRange.location-1;
-                
-                NSRange candiateNewRange = NSMakeRange(candidateTagRange.location, candidateTotalLength);
-                
-                [sdp1 stringByReplacingCharactersInRange:candiateNewRange withString:@""];
-            }
+//            NSRange candidateTagRange = [sdp rangeOfString:@"a=candidate:"];
+//
+//            if (candidateTagRange.length > 0)
+//            {
+//                NSRange uFragTagRange = [sdp rangeOfString:@"a=ice-ufrag:"];
+//
+//                int candidateTotalLength = uFragTagRange.location-candidateTagRange.location-1;
+//
+//                NSRange candiateNewRange = NSMakeRange(candidateTagRange.location, candidateTotalLength);
+//
+//                [sdp1 stringByReplacingCharactersInRange:candiateNewRange withString:@""];
+//            }
     
     
             //  [sdp1 insertString:@"a=ice-options:trickle\r\r" atIndex:fingerPringTagRange.location];
@@ -663,9 +691,9 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
     
            // sdp1 = [sdp1 stringByAppendingString:@"a=end-of-candidates\n"];
 
-            //[sdp1 insertString:@"\ra=end-of-candidates\r" atIndex:fingerPringTagRange.location];
-    
-            [sdp1 insertString:@"a=ice-options:trickle\n" atIndex:fingerPringTagRange.location];
+//            [sdp1 insertString:@"a=end-of-candidates\n" atIndex:fingerPringTagRange.location];
+//    
+           // [sdp1 insertString:@"a=ice-options:trickle\r\n" atIndex:fingerPringTagRange.location];
     
             return sdp1;
     
@@ -756,8 +784,12 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
 }
 
 - (void)peerConnection:(RTCPeerConnection *)peerConnection signalingStateChanged:(RTCSignalingState)stateChanged {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^
+    {
         // I'm seeing this, but not sure what to do with it yet
+//        NSArray* keys = [self.peerConnections allKeysForObject:peerConnection];
+//
+//        [self.delegate webRTC:self sendCachedICECandidate:self.cachedCandidateToSendArray forPeerWithID:keys[0]];
     });
 }
 
@@ -800,7 +832,11 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
         {
             if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone )
             {
-                //[peerConnection createOfferWithDelegate:self constraints:[self _mediaConstraints]];
+                [peerConnection createOfferWithDelegate:self constraints:[self _mediaConstraints]];
+                
+                NSArray* keys = [self.peerConnections allKeysForObject:peerConnection];
+                
+                //[self.delegate webRTC:self sendCachedICECandidate:self.cachedCandidateToSendArray forPeerWithID:keys[0]];
             }
             else
             {
@@ -812,10 +848,17 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
                     {
                         
                         //NSLog(@"Answer desc = %@",peerConnection.localDescription);
+                        NSString* modifiedSDP = [self modifySDP:peerConnection.localDescription.description];
                         
+                        RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:peerConnection.localDescription.type sdp:modifiedSDP];
                         
-                           //  [self.delegate webRTC:self didSendSDPAnswer:peerConnection.localDescription forPeerWithID:keys[0]];
-                       
+//                             [self.delegate webRTC:self didSendSDPAnswer:peerConnection.localDescription forPeerWithID:keys[0]];
+
+                        [self.delegate webRTC:self didSendSDPAnswer:sessionDescription forPeerWithID:keys[0]];
+                        
+                        //NSArray* keys = [self.peerConnections allKeysForObject:peerConnection];
+                        
+                       // [self.delegate webRTC:self sendCachedICECandidate:self.cachedCandidateToSendArray forPeerWithID:keys[0]];
                     }
                     
                 }
@@ -837,7 +880,17 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"stun:stun.l.google.com:19302"
 //            {
 //                [peerConnection createOfferWithDelegate:self constraints:[self _mediaConstraints]];
 //            }
-            [self.delegate webRTC:self didSendICECandidate:candidate forPeerWithID:keys[0]];
+//            if ([candidate.sdp containsString:@"2 udp"])
+//            {
+//
+//            }
+//            else
+//            {
+//                [self.cachedCandidateToSendArray addObject:candidate];
+//            }
+            
+            [peerConnection addICECandidate:candidate];
+            //[self.delegate webRTC:self didSendICECandidate:candidate forPeerWithID:keys[0]];
         }
     });
 }

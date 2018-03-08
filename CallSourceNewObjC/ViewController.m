@@ -637,7 +637,7 @@
     NSMutableDictionary* dict = [NSMutableDictionary new];
     
     [dict setValue:candidate.sdpMid forKey:SDP_MID];
-    [dict setValue:[NSString stringWithFormat:@"%ld",(long)candidate.sdpMLineIndex] forKey:SDP_MLINE_INDEX];
+    [dict setValue:[NSString stringWithFormat:@"%d",candidate.sdpMLineIndex] forKey:SDP_MLINE_INDEX];
     [dict setValue:candidate.sdp forKey:CANDIDATE_SDP];
     
     [iceCandidateDictArray addObject:dict];
@@ -675,6 +675,59 @@
             }
 }
 
+
+- (void)webRTC:(TLKWebRTC *)webRTC sendCachedICECandidate:(NSMutableArray *)candidateArray forPeerWithID:(NSString *)peerID
+{
+   // NSMutableArray* iceCandidateArray = [NSMutableArray new];
+   // NSMutableArray* iceCandidateDictArray = [NSMutableArray new];
+    
+    //[iceCandidateArray addObject:candidate];
+    
+    NSMutableDictionary* dict = [NSMutableDictionary new];
+    
+    for (RTCICECandidate* candidate in candidateArray)
+    {
+        
+        [dict setValue:candidate.sdpMid forKey:SDP_MID];
+        [dict setValue:[NSString stringWithFormat:@"%ld",(long)candidate.sdpMLineIndex] forKey:SDP_MLINE_INDEX];
+        [dict setValue:candidate.sdp forKey:CANDIDATE_SDP];
+        
+        [iceCandidateDictArray addObject:dict];
+    }
+   
+    
+    
+    NSError *error;
+    NSString* json, *json1;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:iceCandidateDictArray options:NSJSONWritingPrettyPrinted error:&error];
+    
+    if (! jsonData) {
+        
+    } else {
+        json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+    
+    NSMutableDictionary* dict1 = [NSMutableDictionary new];
+    
+    [dict1 setValue:json forKey:@"dict"];
+    
+    NSData *jsonData1 = [NSJSONSerialization dataWithJSONObject:dict1 options:NSJSONWritingPrettyPrinted error:&error];
+    
+    if (! jsonData1) {
+        return;
+    } else {
+        json1 = [[NSString alloc] initWithData:jsonData1 encoding:NSUTF8StringEncoding];
+    }
+    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
+    {
+        
+        [[APIManager sharedManager] sendCandidateUsername:@"iPad" candidate:json1];
+    }
+    else
+    {
+        [[APIManager sharedManager] sendCandidateUsername:@"iPhone" candidate:json1];
+    }
+}
 - (void)webRTC:(TLKWebRTC *)webRTC didObserveICEConnectionStateChange:(RTCICEConnectionState)state forPeerWithID:(NSString *)peerID
 {
     if (state == 2)

@@ -9,6 +9,7 @@
 #import "RTCICECandidate.h"
 #import "RTCMediaStream.h"
 #import "RTCTypes.h"
+#import "RTCPeerConnectionInterface.h"
 
 @class RTCICEServer;
 
@@ -25,6 +26,7 @@
 @property(nonatomic,strong) NSMutableArray* iceCandidateDictArray;
 @property(nonatomic,strong) NSMutableArray* iceCandidateGotFromServerArray;
 @property(nonatomic,strong) NSMutableArray* XIRiceServerArray;
+@property(nonatomic,strong) NSMutableArray* cachedCandidateToSendArray;
 - (void)addPeerConnectionForID:(NSString *)identifier iceServerArray:(NSMutableArray*)iceServerArray;
 - (void)removePeerConnectionForID:(NSString *)identifier;
 
@@ -48,7 +50,7 @@
 - (void)webRTC:(TLKWebRTC *)webRTC didSendSDPAnswer:(RTCSessionDescription *)answer forPeerWithID:(NSString* )peerID;
 - (void)webRTC:(TLKWebRTC *)webRTC didSendICECandidate:(RTCICECandidate *)candidate forPeerWithID:(NSString *)peerID;
 - (void)webRTC:(TLKWebRTC *)webRTC didObserveICEConnectionStateChange:(RTCICEConnectionState)state forPeerWithID:(NSString *)peerID;
-
+- (void)webRTC:(TLKWebRTC *)webRTC sendCachedICECandidate:(NSMutableArray *)candidateArray forPeerWithID:(NSString *)peerID;
 - (void)webRTC:(TLKWebRTC *)webRTC addedStream:(RTCMediaStream *)stream forPeerWithID:(NSString *)peerID;
 - (void)webRTC:(TLKWebRTC *)webRTC removedStream:(RTCMediaStream *)stream forPeerWithID:(NSString *)peerID;
 
