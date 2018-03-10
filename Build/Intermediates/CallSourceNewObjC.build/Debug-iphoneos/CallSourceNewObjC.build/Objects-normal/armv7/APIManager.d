@@ -13,4 +13,5 @@ dependencies: \
   /Work/CallSourceNewObjC/CallSourceNewObjC/Libraries/SBJson/SBJson4StreamWriter.h \
   /Work/CallSourceNewObjC/CallSourceNewObjC/Libraries/SBJson/SBJson4StreamTokeniser.h \
   /Work/CallSourceNewObjC/CallSourceNewObjC/Libraries/MBProgressHUD/MBProgressHUD.h \
-  /Work/CallSourceNewObjC/CallSourceNewObjC/AppDelegate.h
+  /Work/CallSourceNewObjC/CallSourceNewObjC/AppDelegate.h \
+  /Work/CallSourceNewObjC/CallSourceNewObjC/ViewController/TLKWebRTC.h

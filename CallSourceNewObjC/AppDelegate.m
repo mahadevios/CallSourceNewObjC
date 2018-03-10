@@ -7,7 +7,8 @@
 //
 
 #import "AppDelegate.h"
-
+#import "ViewController.h"
+#import "ReigisteredUsersViewController.h"
 @interface AppDelegate ()
 
 @end
@@ -22,6 +23,7 @@
     
     [self voipRegistration];
     
+    //[[NSUserDefaults standardUserDefaults] setValue:@"iPad" forKey:USERDEFAULT_USER];
 //    self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
 //    
 //    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
@@ -34,9 +36,61 @@
 //    
 //    return YES;
     //[RTCPeerConnectionFactory initialize];
+    [self checkUserLogin];
+    
     return YES;
 }
 
+-(void)checkUserLogin
+{
+    NSString* loggedInUser = [[NSUserDefaults standardUserDefaults] valueForKey:USERDEFAULT_USER];
+    
+    if ([loggedInUser  isEqualToString: @""] || loggedInUser == NULL)
+    {
+        
+    }
+    else
+    {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main"
+                                                             bundle: nil];
+        
+        ReigisteredUsersViewController* viewController = [storyboard instantiateViewControllerWithIdentifier:@"ReigisteredUsersViewController"];
+        
+        [self.window setRootViewController:viewController];
+        
+        //[self.window.rootViewController presentViewController:loginViewController animated:NO completion:nil];
+    }
+}
+
+-(void)initTLKaddObserverForSDPandCandidate
+{
+    NSString* calleeUser = [[NSUserDefaults standardUserDefaults] valueForKey:USERDEFAULT_USER];
+
+//    NSString* calleeUser = @"iPad";
+
+    if (self.tlk == nil) // for receiver
+    {
+        self.tlk = [[TLKWebRTC alloc] init];
+        
+        self.tlk.delegate = self;
+        
+        [self.tlk addPeerConnectionForID:calleeUser iceServerArray:self.serverCredArray];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self.tlk
+                                                 selector:@selector(setSDPGotFromServer:) name:NOTIFICATION_GET_SDP
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self.tlk
+                                                 selector:@selector(setCandidatesGotFromServer:) name:NOTIFICATION_GET_CANDIDATES
+                                                   object:nil];
+    }
+//    else
+//    {
+//        [self.tlk addPeerConnectionForID:calleeUser iceServerArray:self.serverCredArray];
+//    }
+    
+    
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
@@ -96,7 +150,7 @@
     deviceToken = [deviceToken stringByReplacingOccurrencesOfString:@">" withString:@""];
     deviceToken = [deviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
 
-    [[APIManager sharedManager] updateDevieTokenUsername:@"iPhone" andDeviceId:deviceToken];
+//    [[APIManager sharedManager] updateDevieTokenUsername:@"iPhone" andDeviceId:deviceToken];
     
     //[[APIManager sharedManager] updateDevieTokenUsername:@"iPad" andDeviceId:deviceToken];
 
@@ -116,33 +170,48 @@
 {
     // Process the received push
 //    NSLog(@"%@", payload);
+//    if (self.tlk == nil)
+//    {
+//        [self initTLKaddObserverForSDPandCandidate];
+//    }
     
     NSDictionary* dic = payload.dictionaryPayload;
+    
     NSString* notificationType =  [dic valueForKey:@"notificationType"];
 
-    if ([notificationType  isEqual: @"SDP"])
+    NSString* sdpType =[dic valueForKey:@"sdpType"];
+
+    if ([notificationType  isEqualToString: @"SDP"])
     {
         //NSLog(@"got sdp noti");
         NSDictionary* apsDict = [dic objectForKey:@"aps"];
-        [apsDict valueForKey:@"alert"];
+        
+        //RTCSessionDescription *remoteDesc = [apsDict valueForKey:@"alert"];
         NSString* sdpString =[apsDict valueForKey:@"alert"];
+
+//        payload.dictionaryPayload valueForKey:@"sdpSender"
+//        if ([sdpType  isEqualToString: @"offer"])  // if offer then init the peerconnection
+//        {
+             [self initTLKaddObserverForSDPandCandidate];
+//        }
         
         if (sdpString != nil)
         {
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_GET_SDP object:payload.dictionaryPayload];
             
         }
 
     }
     else
-        if ([notificationType  isEqual: @"Candidate"])
+        if ([notificationType  isEqualToString: @"Candidate"])
   
     {
         //NSLog(@"got candidate noti");
 
         NSDictionary* apsDict = [dic objectForKey:@"aps"];
 
-            NSString* candidateString = [apsDict valueForKey:@"alert"];
+//            NSString* candidateString = [apsDict valueForKey:@"alert"];
 
             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_GET_CANDIDATES object:payload.dictionaryPayload];
             
@@ -151,6 +220,147 @@
 //    UILocalNotification* notif = [[UILocalNotification alloc] init];
 //    notif.alertBody = @"incoming call";
 //    [[UIApplication sharedApplication] presentLocalNotificationNow:notif];
+    
+}
+
+
+#pragma mark:TLK delegate methods
+
+-(void)webRTC:(TLKWebRTC*)tlk didSendSDPOffer:(RTCSessionDescription*)localDescription forPeerWithID:(NSString*)peerId calleeUser:(NSString*)calleeUser
+{
+    [[APIManager sharedManager] sendSDPUsername:peerId SDP:localDescription sdpType:@"offer" calleeUser:calleeUser];
+    
+}
+
+-(void)webRTC:(TLKWebRTC*)tlk didSendSDPAnswer:(RTCSessionDescription*)localDescription forPeerWithID:(NSString*)peerId calleeUser:(NSString*)calleeUser
+{
+    [[APIManager sharedManager] sendSDPUsername:peerId SDP:localDescription sdpType:@"answer" calleeUser:calleeUser];
+    
+}
+
+- (void)webRTC:(TLKWebRTC *)webRTC didSendICECandidate:(RTCICECandidate *)candidate forPeerWithID:(NSString *)peerID
+{
+    NSMutableArray* iceCandidateArray = [NSMutableArray new];
+    NSMutableArray* iceCandidateDictArray = [NSMutableArray new];
+    
+    [iceCandidateArray addObject:candidate];
+    
+    NSMutableDictionary* dict = [NSMutableDictionary new];
+    
+    [dict setValue:candidate.sdpMid forKey:SDP_MID];
+    [dict setValue:[NSString stringWithFormat:@"%d",candidate.sdpMLineIndex] forKey:SDP_MLINE_INDEX];
+    [dict setValue:candidate.sdp forKey:CANDIDATE_SDP];
+    
+    [iceCandidateDictArray addObject:dict];
+    
+    
+    NSError *error;
+    NSString* json, *json1;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:iceCandidateDictArray options:NSJSONWritingPrettyPrinted error:&error];
+    
+    if (! jsonData) {
+        
+    } else {
+        json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+    
+    NSMutableDictionary* dict1 = [NSMutableDictionary new];
+    
+    [dict1 setValue:json forKey:@"dict"];
+    
+    NSData *jsonData1 = [NSJSONSerialization dataWithJSONObject:dict1 options:NSJSONWritingPrettyPrinted error:&error];
+    
+    if (! jsonData1) {
+        return;
+    } else {
+        json1 = [[NSString alloc] initWithData:jsonData1 encoding:NSUTF8StringEncoding];
+    }
+    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
+    {
+        
+        [[APIManager sharedManager] sendCandidateUsername:@"iPad" candidate:json1];
+    }
+    else
+    {
+        [[APIManager sharedManager] sendCandidateUsername:@"iPhone" candidate:json1];
+    }
+}
+
+
+- (void)webRTC:(TLKWebRTC *)webRTC sendCachedICECandidate:(NSMutableArray *)candidateArray forPeerWithID:(NSString *)peerID
+{
+    // NSMutableArray* iceCandidateArray = [NSMutableArray new];
+    // NSMutableArray* iceCandidateDictArray = [NSMutableArray new];
+    
+    //[iceCandidateArray addObject:candidate];
+    
+//    NSMutableDictionary* dict = [NSMutableDictionary new];
+//
+//    for (RTCICECandidate* candidate in candidateArray)
+//    {
+//
+//        [dict setValue:candidate.sdpMid forKey:SDP_MID];
+//        [dict setValue:[NSString stringWithFormat:@"%ld",(long)candidate.sdpMLineIndex] forKey:SDP_MLINE_INDEX];
+//        [dict setValue:candidate.sdp forKey:CANDIDATE_SDP];
+//
+//        [iceCandidateDictArray addObject:dict];
+//    }
+//
+//
+//
+//    NSError *error;
+//    NSString* json, *json1;
+//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:iceCandidateDictArray options:NSJSONWritingPrettyPrinted error:&error];
+//
+//    if (! jsonData) {
+//
+//    } else {
+//        json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+//    }
+//
+//    NSMutableDictionary* dict1 = [NSMutableDictionary new];
+//
+//    [dict1 setValue:json forKey:@"dict"];
+//
+//    NSData *jsonData1 = [NSJSONSerialization dataWithJSONObject:dict1 options:NSJSONWritingPrettyPrinted error:&error];
+//
+//    if (! jsonData1) {
+//        return;
+//    } else {
+//        json1 = [[NSString alloc] initWithData:jsonData1 encoding:NSUTF8StringEncoding];
+//    }
+//    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
+//    {
+//
+//        [[APIManager sharedManager] sendCandidateUsername:@"iPad" candidate:json1];
+//    }
+//    else
+//    {
+//        [[APIManager sharedManager] sendCandidateUsername:@"iPhone" candidate:json1];
+//    }
+}
+- (void)webRTC:(TLKWebRTC *)webRTC didObserveICEConnectionStateChange:(RTCICEConnectionState)state forPeerWithID:(NSString *)peerID
+{
+    if (state == 2 || state == 3)
+    {
+//        self.callStatusLabel.hidden = NO;
+//        
+//        self.callStatusLabel.text = @"Connected";
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RTC_COONECTION_CHANGED object:@"Connected"];
+    }
+    NSLog(@"my state = %d", state);
+    
+    NSLog(@"my id = %@", peerID);
+}
+
+- (void)webRTC:(TLKWebRTC *)webRTC addedStream:(RTCMediaStream *)stream forPeerWithID:(NSString *)peerID
+{
+    
+}
+
+- (void)webRTC:(TLKWebRTC *)webRTC removedStream:(RTCMediaStream *)stream forPeerWithID:(NSString *)peerID
+{
     
 }
 

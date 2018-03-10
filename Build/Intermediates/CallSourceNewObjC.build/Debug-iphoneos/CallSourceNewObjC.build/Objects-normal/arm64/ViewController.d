@@ -1,4 +1,5 @@
-dependencies: /Work/CallSourceNewObjC/CallSourceNewObjC/ViewController.m \
+dependencies: \
+  /Work/CallSourceNewObjC/CallSourceNewObjC/ViewController/ViewController.m \
   /Work/CallSourceNewObjC/CallSourceNewObjC/PrefixHeader.pch \
   /Work/CallSourceNewObjC/CallSourceNewObjC/Constant/Constants.h \
   /Work/CallSourceNewObjC/CallSourceNewObjC/API\ Manager/AppPreferences.h \
@@ -12,6 +13,7 @@ dependencies: /Work/CallSourceNewObjC/CallSourceNewObjC/ViewController.m \
   /Work/CallSourceNewObjC/CallSourceNewObjC/Libraries/SBJson/SBJson4StreamWriter.h \
   /Work/CallSourceNewObjC/CallSourceNewObjC/Libraries/SBJson/SBJson4StreamTokeniser.h \
   /Work/CallSourceNewObjC/CallSourceNewObjC/Libraries/MBProgressHUD/MBProgressHUD.h \
-  /Work/CallSourceNewObjC/CallSourceNewObjC/ViewController.h \
+  /Work/CallSourceNewObjC/CallSourceNewObjC/ViewController/ViewController.h \
   /Work/CallSourceNewObjC/CallSourceNewObjC/WebRTC.h \
-  /Work/CallSourceNewObjC/CallSourceNewObjC/TLKWebRTC.h
+  /Work/CallSourceNewObjC/CallSourceNewObjC/ViewController/TLKWebRTC.h \
+  /Work/CallSourceNewObjC/CallSourceNewObjC/AppDelegate.h

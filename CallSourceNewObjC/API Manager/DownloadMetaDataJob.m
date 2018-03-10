@@ -254,6 +254,32 @@
                 [[AppPreferences sharedAppPreferences] showAlertViewWithTitle:@"Error" withMessage:@"please try again" withCancelText:nil withOkText:@"OK" withAlertTag:1000];
             }
         }
+    
+        else
+            if ([self.downLoadEntityJobName isEqualToString:GET_LISTOF_REGISTERED_USER])
+            {
+                
+                if (response != nil)
+                {
+                    
+                    if ([[response objectForKey:@"code"] isEqualToString:SUCCESS])
+                    {
+                        
+                        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_GET_LISTOF_REGISTERED_USER object:response];
+                        
+                        
+                    }else
+                    {
+                        [[[UIApplication sharedApplication].keyWindow viewWithTag:789] removeFromSuperview];
+                        
+                        [[AppPreferences sharedAppPreferences] showAlertViewWithTitle:@"Error" withMessage:@"username or password is incorrect, please try again" withCancelText:nil withOkText:@"OK" withAlertTag:1000];
+                    }
+                }else
+                {
+                    [[[UIApplication sharedApplication].keyWindow viewWithTag:789] removeFromSuperview];
+                    [[AppPreferences sharedAppPreferences] showAlertViewWithTitle:@"Error" withMessage:@"please try again" withCancelText:nil withOkText:@"OK" withAlertTag:1000];
+                }
+            }
 //       if ([self.downLoadEntityJobName isEqualToString:UPDATE_DEVICE_TOKEN_API])
 //    {
 //        

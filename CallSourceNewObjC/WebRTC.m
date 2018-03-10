@@ -387,10 +387,10 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
 
 - (void)createOfferForPeerWithID:(NSString *)peerID
 {
-    RTCPeerConnection *peerConnection = [self.peerConnections objectForKey:peerID];
-
-    [self.peerToRoleMap setObject:TLKPeerConnectionRoleInitiator forKey:peerID];
-    [peerConnection createOfferWithDelegate:self constraints:[self _mediaConstraints]];
+//    RTCPeerConnection *peerConnection = [self.peerConnections objectForKey:peerID];
+//
+//    [self.peerToRoleMap setObject:TLKPeerConnectionRoleInitiator forKey:peerID];
+//    [peerConnection createOfferWithDelegate:self constraints:[self _mediaConstraints]];
     
     
 //    RTCDataChannelInit *DataChannelInit = [[RTCDataChannelInit alloc] init];
@@ -477,7 +477,7 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
             NSArray *keys = [self.peerConnections allKeysForObject:peerConnection];
             if ([keys count] > 0)
             {
-                [[APIManager sharedManager] sendSDPUsername:keys[0] SDP:peerConnection.localDescription];
+//                [[APIManager sharedManager] sendSDPUsername:keys[0] SDP:peerConnection.localDescription];
 
                 //[self.delegate webRTC:self didSendSDPOffer:peerConnection.localDescription forPeerWithID:keys[0]];
             }
@@ -494,8 +494,8 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
                 NSString* role = [self.peerToRoleMap objectForKey:keys[0]];
                 if (role == TLKPeerConnectionRoleReceiver)
                 {
-                    [[APIManager sharedManager] sendSDPUsername:keys[0] SDP:peerConnection.localDescription];
-
+//                    [[APIManager sharedManager] sendSDPUsername:keys[0] SDP:peerConnection.localDescription];
+                    
                    // [self.delegate webRTC:self didSendSDPAnswer:peerConnection.localDescription forPeerWithID:keys[0]];
                 }
             }

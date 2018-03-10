@@ -65,11 +65,11 @@ static APIManager *singleton = nil;
 
 
 
--(void) sendSDPUsername:(NSString *) usernameString SDP:(id)SDP;
+-(void) sendSDPUsername:(NSString *) usernameString SDP:(id)SDP sdpType:(NSString*)sdpType calleeUser:(NSString*)calleeUser
 {
 //    if ([[AppPreferences sharedAppPreferences] isReachable])
 //    {
-        NSArray *params = [[NSArray alloc] initWithObjects:[NSString stringWithFormat:@"username=%@",usernameString],[NSString stringWithFormat:@"SDP=%@", SDP],nil];
+        NSArray *params = [[NSArray alloc] initWithObjects:[NSString stringWithFormat:@"username=%@",usernameString],[NSString stringWithFormat:@"SDP=%@", SDP],[NSString stringWithFormat:@"sdpType=%@", sdpType],[NSString stringWithFormat:@"calleeUser=%@", calleeUser], nil];
         
         NSDictionary *dictionary = [[NSDictionary alloc] initWithObjectsAndKeys:params,REQUEST_PARAMETER, nil];
         
@@ -84,6 +84,24 @@ static APIManager *singleton = nil;
 //    }
 }
 
+-(void) getListOfRegisteredUser:(NSString*)usernameString
+{
+    //    if ([[AppPreferences sharedAppPreferences] isReachable])
+    //    {
+    NSArray *params = [[NSArray alloc] initWithObjects:[NSString stringWithFormat:@"username=%@",usernameString], nil];
+    
+    NSDictionary *dictionary = [[NSDictionary alloc] initWithObjectsAndKeys:params,REQUEST_PARAMETER, nil];
+    
+    DownloadMetaDataJob *downloadmetadatajob=[[DownloadMetaDataJob alloc]initWithdownLoadEntityJobName:GET_LISTOF_REGISTERED_USER withRequestParameter:dictionary withResourcePath:GET_LISTOF_REGISTERED_USER withHttpMethd:POST];
+    [downloadmetadatajob startMetaDataDownLoad];
+    //    }
+    //    else
+    //    {
+    //        [[[UIApplication sharedApplication].keyWindow viewWithTag:789] setHidden:YES];
+    //
+    //        [[AppPreferences sharedAppPreferences] showAlertViewWithTitle:@"No internet connection!" withMessage:@"Please turn on your inernet connection to access this feature" withCancelText:nil withOkText:@"OK" withAlertTag:1000];
+    //    }
+}
 -(void) updateDevieTokenUsername:(NSString *) usernameString andDeviceId:(NSString*)DeviceToken;
 {
 //    if ([[AppPreferences sharedAppPreferences] isReachable])
