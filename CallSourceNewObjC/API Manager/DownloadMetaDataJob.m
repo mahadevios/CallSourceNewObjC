@@ -215,12 +215,13 @@
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_UPDATE_DEVICE_TOKEN object:response];
                 
-                
-            }else
+                [[AppPreferences sharedAppPreferences] showAlertViewWithTitle:@"Message" withMessage:[response valueForKey:@"message"] withCancelText:nil withOkText:@"OK" withAlertTag:1000];
+            }
+            else
             {
                 [[[UIApplication sharedApplication].keyWindow viewWithTag:789] removeFromSuperview];
 
-                [[AppPreferences sharedAppPreferences] showAlertViewWithTitle:@"Error" withMessage:@"username or password is incorrect, please try again" withCancelText:nil withOkText:@"OK" withAlertTag:1000];
+                [[AppPreferences sharedAppPreferences] showAlertViewWithTitle:@"Error!" withMessage:@"Something went wrong, please try again" withCancelText:nil withOkText:@"OK" withAlertTag:1000];
             }
         }else
         {

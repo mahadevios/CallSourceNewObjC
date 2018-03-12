@@ -58,6 +58,9 @@
 #define SEND_SDP_API                        @"MahadevSendNotificationWithSDP"
 #define SEND_CANDIDATES_API                 @"MahadevSendNotificationWithCandidate"
 #define GET_LISTOF_REGISTERED_USER          @"getListOfRegisteredUsers"
+#define LOGOUT_API                          @"MahadevLogout"
+
+
 
 //#define XIR_GETICE_API @"https://Mahadev:03413bb8-17d0-11e8-8fe5-86a3da8ef5ab@global.xirsys.net/_turn/MyFirstApp"
 #define XIR_GET_CRED_API @"https://Mahadev:04effcc2-17e1-11e8-a178-e7f8b0f95b40@global.xirsys.net/_turn/MyFirstApp?expire=1000"
@@ -74,6 +77,7 @@
 #define NOTIFICATION_GET_CANDIDATES                 @"getCandidates"
 #define NOTIFICATION_GET_LISTOF_REGISTERED_USER     @"getListOfRegisteredUsers"
 #define NOTIFICATION_RTC_COONECTION_CHANGED         @"connectionChanged"
+#define NOTIFICATION_LOGOUT                         @"logOut"
 
 #define NOTIFICATION_GOT_TURN                        @"gotTurn"
 
