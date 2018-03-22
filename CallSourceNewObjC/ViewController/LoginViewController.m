@@ -57,7 +57,9 @@
 
         [[[UIApplication sharedApplication] keyWindow] setRootViewController:viewController];
         
-//         [[APIManager sharedManager] updateDevieTokenUsername:@"iPhone" andDeviceId:deviceToken];
+        NSString* username = [_usernameTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        
+         [[APIManager sharedManager] updateDevieTokenUsername:username andDeviceId:[AppPreferences sharedAppPreferences].deviceToken];
     }
 }
 @end

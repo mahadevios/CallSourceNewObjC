@@ -102,7 +102,7 @@ static APIManager *singleton = nil;
     //        [[AppPreferences sharedAppPreferences] showAlertViewWithTitle:@"No internet connection!" withMessage:@"Please turn on your inernet connection to access this feature" withCancelText:nil withOkText:@"OK" withAlertTag:1000];
     //    }
 }
--(void) updateDevieTokenUsername:(NSString *) usernameString andDeviceId:(NSString*)DeviceToken;
+-(void) updateDevieTokenUsername:(NSString *) usernameString andDeviceId:(NSString*)DeviceToken
 {
 //    if ([[AppPreferences sharedAppPreferences] isReachable])
 //    {
@@ -120,6 +120,27 @@ static APIManager *singleton = nil;
 //        [[AppPreferences sharedAppPreferences] showAlertViewWithTitle:@"No internet connection!" withMessage:@"Please turn on your inernet connection to access this feature" withCancelText:nil withOkText:@"OK" withAlertTag:1000];
 //    }
 
+}
+
+
+-(void) logoutUsername:(NSString *) usernameString
+{
+    //    if ([[AppPreferences sharedAppPreferences] isReachable])
+    //    {
+    NSArray *params = [[NSArray alloc] initWithObjects:[NSString stringWithFormat:@"username=%@",usernameString],nil];
+    
+    NSDictionary *dictionary = [[NSDictionary alloc] initWithObjectsAndKeys:params,REQUEST_PARAMETER, nil];
+    
+    DownloadMetaDataJob *downloadmetadatajob=[[DownloadMetaDataJob alloc]initWithdownLoadEntityJobName:LOGOUT_API withRequestParameter:dictionary withResourcePath:LOGOUT_API withHttpMethd:POST];
+    [downloadmetadatajob startMetaDataDownLoad];
+    //    }
+    //    else
+    //    {
+    //        [[[UIApplication sharedApplication].keyWindow viewWithTag:789] setHidden:YES];
+    //
+    //        [[AppPreferences sharedAppPreferences] showAlertViewWithTitle:@"No internet connection!" withMessage:@"Please turn on your inernet connection to access this feature" withCancelText:nil withOkText:@"OK" withAlertTag:1000];
+    //    }
+    
 }
 
 -(void) sendCandidateUsername:(NSString *) usernameString candidate:(id)candidate

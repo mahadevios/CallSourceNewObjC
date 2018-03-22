@@ -14,4 +14,62 @@ dependencies: \
   /Work/CallSourceNewObjC/CallSourceNewObjC/Libraries/SBJson/SBJson4StreamTokeniser.h \
   /Work/CallSourceNewObjC/CallSourceNewObjC/Libraries/MBProgressHUD/MBProgressHUD.h \
   /Work/CallSourceNewObjC/CallSourceNewObjC/ViewController/TLKWebRTC.h \
-  /Work/CallSourceNewObjC/CallSourceNewObjC/Libraries/NSString+URLEncodedString.h
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Modules/module.modulemap \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCFileLogger.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCCallbackLogger.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCVideoEncoderVP9.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCVideoEncoderVP8.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCVideoDecoderVP9.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCVideoDecoderVP8.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/UIDevice+RTCDevice.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCVideoTrack.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCVideoSource.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCVideoFrameBuffer.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCVideoCodecH264.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCTracing.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCSessionDescription.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCSSLAdapter.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCRtpTransceiver.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCDtmfSender.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCRtpSender.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCRtpReceiver.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCRtpParameters.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCRtpEncodingParameters.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCRtpCodecParameters.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCPeerConnectionFactoryOptions.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCPeerConnectionFactory.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCPeerConnection.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCMetricsSampleInfo.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCMetrics.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCMediaStream.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCMediaConstraints.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCLogging.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCLegacyStatsReport.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCIntervalRange.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCIceServer.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCIceCandidate.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCFileVideoCapturer.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCFieldTrials.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCVideoViewShading.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCVideoRenderer.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCEAGLVideoView.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCDispatcher.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCDataChannelConfiguration.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCDataChannel.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCConfiguration.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCCameraPreviewView.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCVideoCapturer.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCCameraVideoCapturer.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCMediaStreamTrack.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCAudioTrack.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCMediaSource.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCAudioSource.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCAudioSessionConfiguration.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCVideoCodecFactory.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCVideoFrame.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCVideoCodec.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCMacros.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCAudioSession.h \
+  /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/WebRTC.h \
+  /Work/CallSourceNewObjC/CallSourceNewObjC/Libraries/NSString+URLEncodedString.h \
+  /Work/CallSourceNewObjC/CallSourceNewObjC/AppDelegate.h

@@ -78,8 +78,12 @@
 #define NOTIFICATION_GET_LISTOF_REGISTERED_USER     @"getListOfRegisteredUsers"
 #define NOTIFICATION_RTC_COONECTION_CHANGED         @"connectionChanged"
 #define NOTIFICATION_LOGOUT                         @"logOut"
+#define NOTIFICATION_DATA_CHANNEL_OPENED            @"dataChannelOpened"
+
 
 #define NOTIFICATION_GOT_TURN                        @"gotTurn"
+#define NOTIFICATION_HANG_UP_CALL                    @"hangUpCall"
+
 
 
 #endif /* Constants_h */

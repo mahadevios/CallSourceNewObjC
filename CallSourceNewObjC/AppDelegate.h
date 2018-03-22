@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <PushKit/PushKit.h>
-#import "RTCPeerConnectionFactory.h"
+
 #import "TLKWebRTC.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate,PKPushRegistryDelegate,TLKWebRTCDelegate>

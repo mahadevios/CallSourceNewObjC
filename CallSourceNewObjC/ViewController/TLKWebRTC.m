@@ -33,24 +33,19 @@
 
 // https://webrtchacks.com/limit-webrtc-bandwidth-sdp/  update sdp
 #import "TLKWebRTC.h"
+
 #import <AVFoundation/AVFoundation.h>
-#import "RTCPeerConnectionFactory.h"
-#import "RTCPeerConnection.h"
-#import "RTCICEServer.h"
-#import "RTCPair.h"
-#import "RTCMediaConstraints.h"
-#import "RTCSessionDescription.h"
-#import "RTCSessionDescriptionDelegate.h"
-#import "RTCPeerConnectionDelegate.h"
-#import "RTCAudioTrack.h"
-#import "RTCAVFoundationVideoSource.h"
-#import "RTCVideoTrack.h"
+
+
 #import "NSString+URLEncodedString.h"
 
-@interface TLKWebRTC () <RTCSessionDescriptionDelegate,RTCPeerConnectionDelegate>
+#import "AppDelegate.h"
+
+@interface TLKWebRTC () <RTCPeerConnectionDelegate,RTCDataChannelDelegate>
 
 @property (readwrite, nonatomic) RTCMediaStream *localMediaStream;
 @property (nonatomic, strong) RTCPeerConnectionFactory *peerFactory;
+@property (nonatomic,strong) RTCDataChannel* dataChannelRemote;
 @property (nonatomic, strong) NSMutableDictionary *peerConnections;
 @property (nonatomic, strong) NSMutableDictionary *peerToRoleMap;
 @property (nonatomic, strong) NSMutableDictionary *peerToICEMap;
@@ -101,9 +96,8 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
 - (instancetype)init
 {
     // Use default device
-    self.iceCandidateDictArray = [NSMutableArray new];
     
-    self.cachedCandidateToSendArray = [NSMutableArray new];
+    //self.cachedCandidateToSendArray = [NSMutableArray new];
     
     return [self initWithVideo:NO];
 }
@@ -160,16 +154,23 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
     
     if ([sdpType isEqualToString:@"offer"] )
     {
-        RTCSessionDescription *remoteDesc = [[RTCSessionDescription alloc] initWithType:@"offer" sdp:sdp1];
+        RTCSessionDescription *remoteDesc = [[RTCSessionDescription alloc] initWithType:RTCSdpTypeOffer sdp:sdp1];
+        
+//          dispatch_async(dispatch_get_main_queue(), ^{
         
         [self setRemoteDescription:remoteDesc forPeerWithID:loggedInUser receiver:true];
-        
+//         });
     }
     else
     {
-        RTCSessionDescription *remoteDesc = [[RTCSessionDescription alloc] initWithType:@"answer" sdp:sdp1];
+        RTCSessionDescription *remoteDesc = [[RTCSessionDescription alloc] initWithType:RTCSdpTypeAnswer sdp:sdp1];
         
-        [self setRemoteDescription:remoteDesc forPeerWithID:loggedInUser receiver:false];
+//            dispatch_async(dispatch_get_main_queue(), ^{
+        
+                [self setRemoteDescription:remoteDesc forPeerWithID:loggedInUser receiver:false];
+
+        
+//            });
         
     }
 
@@ -195,76 +196,85 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
     
     self.iceCandidateGotFromServerArray = [NSJSONSerialization JSONObjectWithData:data1 options:NSJSONReadingAllowFragments error:&err];
     
-    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
-    {
-        
+//    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
+//    {
+    
         for (int i = 0; i< self.iceCandidateGotFromServerArray.count; i++)
         {
             NSDictionary* dic = self.iceCandidateGotFromServerArray[i];
             
-            NSString* sdp = [dic valueForKey:CANDIDATE_SDP];
+            NSString* sdp = [dic objectForKey:CANDIDATE_SDP];
             
-            NSRange uFragTagRange = [sdp rangeOfString:@"ufrag "];
-            
-            NSRange sdpRange = [sdp rangeOfString:sdp];
-            
-            int sdpWOufragLength = uFragTagRange.location;
-            
-            int ufragTotalLength = sdpRange.length - sdpWOufragLength;
-            
-            NSRange uFragRange = NSMakeRange(uFragTagRange.location+6, ufragTotalLength-6);
-            
-            NSString* uFragTotalSubString = [sdp substringWithRange:uFragRange];
-            
-            NSString* ufragReplaceString = [uFragTotalSubString stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-            
-            sdp = [sdp stringByReplacingCharactersInRange:uFragRange withString:ufragReplaceString];
+//            NSRange uFragTagRange = [sdp rangeOfString:@"ufrag "];
+//
+//            NSRange sdpRange = [sdp rangeOfString:sdp];
+//
+//            int sdpWOufragLength = uFragTagRange.location;
+//
+//            int ufragTotalLength = sdpRange.length - sdpWOufragLength;
+//
+//            NSRange uFragRange = NSMakeRange(uFragTagRange.location+6, ufragTotalLength-6);
+//
+//            NSString* uFragTotalSubString = [sdp substringWithRange:uFragRange];
+//
+//            NSString* ufragReplaceString = [uFragTotalSubString stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+//
+//            sdp = [sdp stringByReplacingCharactersInRange:uFragRange withString:ufragReplaceString];
 
-            RTCICECandidate *candidate = [[RTCICECandidate alloc] initWithMid:[dic valueForKey:SDP_MID]
-                                                                        index:(int)[dic valueForKey:SDP_MLINE_INDEX]
-                                                                          sdp:sdp];
-
-            NSLog(@"Got new Canidate from Noti. =%@", candidate);
+            int index = [[dic objectForKey:SDP_MLINE_INDEX] intValue];
             
-            [self addICECandidate:candidate forPeerWithID:@"iPad"];
+//            RTCIceCandidate *candidate = [[RTCIceCandidate alloc] initWithMid:[dic objectForKey:SDP_MID]
+//                                                                        index:ind
+//                                                                          sdp:sdp];
+
+            NSString* sdpMid = [dic objectForKey:SDP_MID];
+            
+            RTCIceCandidate *candidate = [[RTCIceCandidate alloc] initWithSdp:sdp sdpMLineIndex:index sdpMid:sdpMid];
+            //
+            
+//            NSLog(@"Got new Canidate from Noti. =%@", candidate);
+            
+            NSString* loggedInUser  = [[NSUserDefaults standardUserDefaults] valueForKey:USERDEFAULT_USER];
+            
+            [self addICECandidate:candidate forPeerWithID:loggedInUser];
             
         }
-    }
-    else
-    {
-        for (int i = 0; i< self.iceCandidateGotFromServerArray.count; i++)
-        {
-            NSDictionary* dic = self.iceCandidateGotFromServerArray[i];
-            
-            NSString* sdp = [dic valueForKey:CANDIDATE_SDP];
-            
-            NSRange uFragTagRange = [sdp rangeOfString:@"ufrag "];
-            
-            NSRange sdpRange = [sdp rangeOfString:sdp];
-            
-            int sdpWOufragLength = uFragTagRange.location;
-            
-            int ufragTotalLength = sdpRange.length - sdpWOufragLength;
-            
-            NSRange uFragRange = NSMakeRange(uFragTagRange.location+6, ufragTotalLength-6);
-            
-            NSString* uFragTotalSubString = [sdp substringWithRange:uFragRange];
-            
-            NSString* ufragReplaceString = [uFragTotalSubString stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-            
-            sdp = [sdp stringByReplacingCharactersInRange:uFragRange withString:ufragReplaceString];
-            
-            RTCICECandidate *candidate = [[RTCICECandidate alloc] initWithMid:[dic valueForKey:SDP_MID]
-                                                                        index:(int)[dic valueForKey:SDP_MLINE_INDEX]
-                                                                          sdp:sdp];
-            
-            NSLog(@"Got new Canidate from Noti. =%@", candidate);
-
-            [self addICECandidate:candidate forPeerWithID:@"iPhone"];
-            
-        }
-        
-    }
+//    }
+//    else
+//    {
+//        for (int i = 0; i< self.iceCandidateGotFromServerArray.count; i++)
+//        {
+//            NSDictionary* dic = self.iceCandidateGotFromServerArray[i];
+//
+//            NSString* sdp = [dic objectForKey:CANDIDATE_SDP];
+//
+//            NSRange uFragTagRange = [sdp rangeOfString:@"ufrag "];
+//
+//            NSRange sdpRange = [sdp rangeOfString:sdp];
+//
+//            int sdpWOufragLength = uFragTagRange.location;
+//
+//            int ufragTotalLength = sdpRange.length - sdpWOufragLength;
+//
+//            NSRange uFragRange = NSMakeRange(uFragTagRange.location+6, ufragTotalLength-6);
+//
+//            NSString* uFragTotalSubString = [sdp substringWithRange:uFragRange];
+//
+//            NSString* ufragReplaceString = [uFragTotalSubString stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+//
+//            sdp = [sdp stringByReplacingCharactersInRange:uFragRange withString:ufragReplaceString];
+//
+//            RTCICECandidate *candidate = [[RTCICECandidate alloc] initWithMid:[dic objectForKey:SDP_MID]
+//                                                                        index:0
+//                                                                          sdp:sdp];
+//
+////            NSLog(@"Got new Canidate from Noti. =%@", candidate);
+//
+//            [self addICECandidate:candidate forPeerWithID:@"iPhone"];
+//
+//        }
+//
+//    }
     
 }
 - (void)_commonSetup
@@ -279,59 +289,59 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
     
     self.iceServers = [NSMutableArray new];
     
-    RTCICEServer *defaultStunServer = [[RTCICEServer alloc] initWithURI:[NSURL URLWithString:TLKWebRTCSTUNHostname1] username:@"" password:@""];
+    self.iceCandidateDictArray = [NSMutableArray new];
 
-    RTCICEServer *defaultTurnServer = [[RTCICEServer alloc] initWithURI:[NSURL URLWithString:TLKWebRTCSTUNHostname2] username:@"mahadevmandale@yahoo.com" password:@"Mahadev7"];
+//    RTCICEServer *defaultStunServer = [[RTCICEServer alloc] initWithURI:[NSURL URLWithString:TLKWebRTCSTUNHostname1] username:@"" password:@""];
 
-    [self.iceServers addObject:defaultStunServer];
+//    RTCICEServers *defaultTurnServer = [[RTCICEServers alloc] initWithURI:[NSURL URLWithString:TLKWebRTCSTUNHostname2] username:@"mahadevmandale@yahoo.com" password:@"Mahadev7"];
+
+    NSMutableArray* stunTurnUrlStringArray = [[NSMutableArray alloc] initWithObjects:TLKWebRTCSTUNHostname1,TLKWebRTCSTUNHostname2, nil];
     
+    RTCIceServer *defaultTurnServer = [[RTCIceServer alloc] initWithURLStrings:stunTurnUrlStringArray username:@"mahadevmandale@yahoo.com" credential:@"Mahadev7"];
+
     [self.iceServers addObject:defaultTurnServer];
 
-    [RTCPeerConnectionFactory initializeSSL];
-    
+    [RTCPeerConnectionFactory initialize];
+
     [self _createLocalStream];
 }
 
 - (void)_createLocalStream
 {
-    
-    self.localMediaStream = [self.peerFactory mediaStreamWithLabel:[[NSUUID UUID] UUIDString]];
-    
-    RTCAudioTrack *audioTrack = [self.peerFactory audioTrackWithID:[[NSUUID UUID] UUIDString]];
-    
+    self.localMediaStream = [self.peerFactory mediaStreamWithStreamId:[[NSUUID UUID] UUIDString]];
+
+    RTCAudioTrack *audioTrack = [self.peerFactory audioTrackWithTrackId:[[NSUUID UUID] UUIDString]];
+
     [self.localMediaStream addAudioTrack:audioTrack];
-    
 
     if (self.allowVideo)
     {
-        RTCAVFoundationVideoSource *videoSource = [[RTCAVFoundationVideoSource alloc] initWithFactory:self.peerFactory constraints:nil];
-        
-        videoSource.useBackCamera = NO;
-        
-        RTCVideoTrack *videoTrack = [[RTCVideoTrack alloc] initWithFactory:self.peerFactory source:videoSource trackId:[[NSUUID UUID] UUIDString]];
-        
-        [self.localMediaStream addVideoTrack:videoTrack];
+//        RTCAVFoundationVideoSource *videoSource = [[RTCAVFoundationVideoSource alloc] initWithFactory:self.peerFactory constraints:nil];
+//
+//        videoSource.useBackCamera = NO;
+//
+//        RTCVideoTrack *videoTrack = [[RTCVideoTrack alloc] initWithFactory:self.peerFactory source:videoSource trackId:[[NSUUID UUID] UUIDString]];
+//
+//        [self.localMediaStream addVideoTrack:videoTrack];
     }
 }
 
 - (RTCMediaConstraints *)_mediaConstraints
 {
-    RTCPair *audioConstraint = [[RTCPair alloc] initWithKey:@"OfferToReceiveAudio" value:@"true"];
+
     
-    RTCPair *videoConstraint = [[RTCPair alloc] initWithKey:@"OfferToReceiveVideo" value:self.allowVideo ? @"true" : @"false"];
+    NSDictionary* mandateConstraint = [[NSDictionary alloc] initWithObjectsAndKeys:kRTCMediaConstraintsValueTrue,kRTCMediaConstraintsOfferToReceiveAudio,self.allowVideo ? kRTCMediaConstraintsValueTrue : kRTCMediaConstraintsValueFalse, @"OfferToReceiveVideo", nil];
     
-    RTCPair *sctpConstraint = [[RTCPair alloc] initWithKey:@"internalSctpDataChannels" value:@"true"];
+     NSDictionary* optionalConstraint = [[NSDictionary alloc] initWithObjectsAndKeys:kRTCMediaConstraintsValueTrue,@"DtlsSrtpKeyAgreement", kRTCMediaConstraintsValueTrue,@"internalSctpDataChannels",  nil];
     
-    RTCPair *dtlsConstraint = [[RTCPair alloc] initWithKey:@"DtlsSrtpKeyAgreement" value:@"true"];
-    
-    return [[RTCMediaConstraints alloc] initWithMandatoryConstraints:@[audioConstraint, videoConstraint] optionalConstraints:@[sctpConstraint, dtlsConstraint]];
+    return [[RTCMediaConstraints alloc] initWithMandatoryConstraints:mandateConstraint optionalConstraints:optionalConstraint];
 }
 
 #pragma mark - ICE server
 
-- (void)addICEServer:(RTCICEServer *)server
+- (void)addICEServer:(RTCIceServer *)server
 {
-    BOOL isStun = [server.URI.scheme isEqualToString:@"stun"];
+    BOOL isStun = [server.hostname containsString:@"stun"];
     if (isStun)
     {
         // Array of servers is always stored with stun server in first index, and we only want one,
@@ -346,6 +356,13 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
 
 #pragma mark - Peer Connections
 
+-(void)hangUpCall:(NSNotification*)noti
+{
+    NSString* currentUser = [[NSUserDefaults standardUserDefaults] valueForKey:USERDEFAULT_USER];
+
+    [self removePeerConnectionForID:currentUser];
+    
+}
 - (NSString *)identifierForPeer:(RTCPeerConnection *)peer
 {
     NSArray *keys = [self.peerConnections allKeysForObject:peer];
@@ -356,6 +373,7 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
 - (void)addPeerConnectionForID:(NSString *)identifier iceServerArray:(NSMutableArray*)iceServerArray;
 {
     self.XIRiceServerArray = iceServerArray;
+    
     
 //    for (NSDictionary* serverCredDict in self.XIRiceServerArray)
 //    {
@@ -377,16 +395,67 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
 //        [self.iceServers addObject:defaultTurnServer];
 //    }
     
-    RTCPeerConnection *peer = [self.peerFactory peerConnectionWithICEServers:[self iceServers] constraints:[self _mediaConstraints] delegate:self];
+//    RTCPeerConnection *peer = [self.peerFactory peerConnectionWithICEServers:[self iceServers] constraints:[self _mediaConstraints] delegate:self];
+//    self.peerFactory
+
+    //[self.peerFactory connection]
+    RTCConfiguration* conf = [[RTCConfiguration alloc] init];
     
-    
-//    RTCConfiguration *conf = [[RTCConfiguration alloc] initWithIceTransportsType:kRTCIceTransportsTypeAll bundlePolicy:kRTCBundlePolicyBalanced rtcpMuxPolicy:kRTCRtcpMuxPolicyRequire tcpCandidatePolicy:kRTCTcpCandidatePolicyEnabled audioJitterBufferMaxPackets:50 iceConnectionReceivingTimeout:1 iceBackupCandidatePairPingInterval:2];
+    conf.iceServers = [self iceServers];
+
+//    conf.iceTransportPolicy = RTCIceTransportPolicyAll;
 //
+//    conf.bundlePolicy = RTCBundlePolicyBalanced;
+//
+//    conf.rtcpMuxPolicy = RTCRtcpMuxPolicyNegotiate;
+//
+//    conf.tcpCandidatePolicy = RTCTcpCandidatePolicyEnabled;
+//
+//    conf.audioJitterBufferMaxPackets = 50;
+//
+//    conf.iceConnectionReceivingTimeout = 1;
+//
+//    conf.iceBackupCandidatePairPingInterval = 1;
+    
+    
+//    RTCPeerConnection *peer = [[self.peerFactory peerConnectionWithConfiguration:conf constraints:[self _mediaConstraints]] delegate:self];
 //    conf.iceServers = [self iceServers];
+
+    RTCPeerConnection *peer = [self.peerFactory peerConnectionWithConfiguration:conf constraints:[self _mediaConstraints] delegate:self];
+//   peer.iceServerArray = [self iceServerArray];
+//    RTCConfiguration *conf = [[RTCConfiguration alloc] initWithIceTransportsType:kRTCIceTransportsTypeAll bundlePolicy:kRTCBundlePolicyBalanced rtcpMuxPolicy:kRTCRtcpMuxPolicyRequire tcpCandidatePolicy:kRTCTcpCandidatePolicyEnabled audioJitterBufferMaxPackets:50 iceConnectionReceivingTimeout:1 iceBackupCandidatePairPingInterval:1];
+//
 //
 //    RTCPeerConnection *peer = [self.peerFactory peerConnectionWithConfiguration:conf constraints:[self _mediaConstraints] delegate:self];
 
     [peer addStream:self.localMediaStream];
+    
+//    RTCConfiguration *conf1 = [[RTCConfiguration alloc] init];
+//
+//    conf1.iceConnectionReceivingTimeout = 1;
+//
+//    conf1.iceBackupCandidatePairPingInterval = 1;
+//
+//    conf1.rtcpMuxPolicy = kRTCRtcpMuxPolicyRequire;
+//
+//    conf1.audioJitterBufferMaxPackets = 50;
+//
+//    conf1.tcpCandidatePolicy = kRTCTcpCandidatePolicyEnabled;
+//
+//    conf1.bundlePolicy = kRTCBundlePolicyBalanced;
+//
+//    conf1.iceTransportsType = kRTCIceTransportsTypeAll;
+//
+//    [peer setConfiguration:conf1];
+    
+//    NSLog(@"trans type = %d",conf1.iceTransportsType);
+//    NSLog(@"bundlePolicy  = %d",conf1.bundlePolicy);
+//    NSLog(@"tcpCandidatePolicy  = %d",conf1.tcpCandidatePolicy);
+//    NSLog(@"iceBackupCandidatePairPingInterval  = %d",conf1.iceBackupCandidatePairPingInterval);
+//    NSLog(@"iceConnectionReceivingTimeout  = %d",conf1.iceConnectionReceivingTimeout);
+//    NSLog(@"rtcpMuxPolicy  = %d",conf1.rtcpMuxPolicy);
+//    NSLog(@"audioJitterBufferMaxPackets  = %d",conf1.audioJitterBufferMaxPackets);
+
     
     [self.peerConnections setObject:peer forKey:identifier];
 }
@@ -399,7 +468,25 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
     
     [self.peerToRoleMap removeObjectForKey:identifier];
     
-    [peer close];
+    if (self.localMediaStream != nil)
+    {
+        [peer removeStream:self.localMediaStream];
+        
+        [peer close];
+        
+        self.localMediaStream = nil;
+        
+        peer = nil;
+        
+        AppDelegate* app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+
+        if (app.tlk != nil)
+        {
+            app.tlk = nil;
+        }
+        
+    }
+    
 }
 
 #pragma mark -
@@ -412,69 +499,161 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
     
     [self.peerToRoleMap setObject:TLKPeerConnectionRoleInitiator forKey:peerID];
     
-    [peerConnection createOfferWithDelegate:self constraints:[self _mediaConstraints]];
+    [self createDataChannel:peerConnection];
+    
+    [peerConnection offerForConstraints:[self _mediaConstraints] completionHandler:^(RTCSessionDescription * _Nullable sdp, NSError * _Nullable error) {
+        
+//        RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:originalSdp.type sdp:originalSdp.description];
+
+        
+//        RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:sdp.type sdp:sdp.description];
+
+        
+
+        [peerConnection setLocalDescription:sdp completionHandler:^(NSError * _Nullable error) {
+            
+            if (peerConnection.signalingState == RTCSignalingStateHaveLocalOffer)
+            {
+                [self.delegate webRTC:self didSendSDPOffer:sdp.sdp forPeerWithID:peerID calleeUser:self.calleeName];
+
+            }
+
+        }];
+    }];
+//    [peerConnection createOfferWithDelegate:self constraints:[self _mediaConstraints]];
 }
+
+-(void)createDataChannel:(RTCPeerConnection*)peerConnection
+{
+    RTCDataChannelConfiguration* conf = [[RTCDataChannelConfiguration alloc] init];
+    
+    conf.maxRetransmits = 0;
+    conf.isOrdered=false;
+//    conf.maxRetransmitTimeMs = -1;
+    conf.isNegotiated = false;
+//    conf.streamId = 25;
+    
+    self.dataChannel =[peerConnection dataChannelForLabel:@"myLabel" configuration:conf];
+    
+//    dataChannel.delegate = self;
+    
+//    self.dataChannel = dataChannel;
+    
+}
+
+-(void)sendMessageUsingDataChannel:(NSString*)messageString
+{
+    RTCDataBuffer *buffer = [[RTCDataBuffer alloc] initWithData:[messageString dataUsingEncoding:NSUTF8StringEncoding] isBinary:NO];
+    
+    BOOL x = [self.dataChannel sendData:buffer];
+    
+    NSLog(@"data sent %d", x);
+}
+
 
 - (void)setRemoteDescription:(RTCSessionDescription *)remoteSDP forPeerWithID:(NSString *)peerID receiver:(BOOL)isReceiver
 {
     RTCPeerConnection *peerConnection = [self.peerConnections objectForKey:peerID];
+    
+    NSLog(@"delegate = %@", peerConnection.delegate.class);
+    __weak RTCPeerConnection *peerConnection1 = peerConnection;
     
     if (isReceiver)
     {
         [self.peerToRoleMap setObject:TLKPeerConnectionRoleReceiver forKey:peerID];
     }
 
-    [peerConnection setRemoteDescriptionWithDelegate:self sessionDescription:remoteSDP];
-    
+
+    [peerConnection setRemoteDescription:remoteSDP completionHandler:^(NSError * _Nullable error)
+    {
+       
+        if (peerConnection.signalingState == RTCSignalingStateHaveRemoteOffer)
+        {
+            NSLog(@"media const = %@", [self  _mediaConstraints]);
+            
+            
+            [peerConnection answerForConstraints:[self _mediaConstraints] completionHandler:^(RTCSessionDescription * _Nullable sdp1, NSError * _Nullable error) {
+            
+                [peerConnection setLocalDescription:sdp1 completionHandler:^(NSError * _Nullable error) {
+                    NSArray* keys = [self.peerConnections allKeysForObject:peerConnection];
+                    
+                    NSString* role = [self.peerToRoleMap objectForKey:keys[0]];
+                    
+                    
+                    if (role == TLKPeerConnectionRoleReceiver)
+                    {
+                        [self.delegate webRTC:self didSendSDPAnswer:sdp1.sdp forPeerWithID:keys[0] calleeUser:self.sdpSender];
+                    }
+                }];
+                
+//                }
+               
+            
+            }];
+        }
+        else
+            if (peerConnection.signalingState == RTCSignalingStateStable)
+            {
+                
+            }
+        
+
+    }];
+
     
 }
 
-- (void)addICECandidate:(RTCICECandidate*)candidate forPeerWithID:(NSString *)peerID
+- (void)addICECandidate:(RTCIceCandidate*)candidate forPeerWithID:(NSString *)peerID
 {
     RTCPeerConnection *peerConnection = [self.peerConnections objectForKey:peerID];
     
-    if (peerConnection.iceGatheringState == RTCICEGatheringNew)
-    {
-        NSMutableArray *candidates = [self.peerToICEMap objectForKey:peerID];
-        
-        if (!candidates)
-        {
-            candidates = [NSMutableArray array];
-            
-            [self.peerToICEMap setObject:candidates forKey:peerID];
-        }
-        
-        [candidates addObject:candidate];
-        
-        NSLog(@"candidate added to stack from Noti");
-    }
-    else
-    {
+//    if (peerConnection.iceGatheringState == RTCICEGatheringNew)
+//    {
+//        NSMutableArray *candidates = [self.peerToICEMap objectForKey:peerID];
+//
+//        if (!candidates)
+//        {
+//            candidates = [NSMutableArray array];
+//
+//            [self.peerToICEMap setObject:candidates forKey:peerID];
+//        }
+//
+//        [candidates addObject:candidate];
+//
+//        NSLog(@"candidate added to stack from Noti");
+//    }
+//    else
+//    {
         if (peerConnection.remoteDescription == nil)
         {
             [self.iceCandidateDictArray addObject:candidate];
         }
         else
         {
-            for (RTCICECandidate* candidate in self.iceCandidateDictArray)
+            for (RTCIceCandidate* candidate in self.iceCandidateDictArray)
             {
-                [peerConnection addICECandidate:candidate];
+                [peerConnection addIceCandidate:candidate];
 
-                //NSLog(@"candidate added from array");
+                //[[RTCPeerConnection alloc] addICECandidate:candidate];
+                 NSLog(@"Remote candidate = %@", candidate);
             }
             
             [self.iceCandidateDictArray removeAllObjects];
 
-            [peerConnection addICECandidate:candidate];
+            NSLog(@"Remote candidate = %@", candidate);
+            
+            [peerConnection addIceCandidate:candidate];
         
-            //NSLog(@"candidate added directly from Noti");
+            
+           // NSLog(@"candidate added directly from Noti = %d",added);
         
+            NSLog(@"remote desc after adding candidate = %@",peerConnection.remoteDescription);
             //NSLog(@"remote desc after cand. addn = %@", peerConnection.remoteDescription.description) ;
         }
+    
         
         
-        
-    }
+//    }
 }
 
 #pragma mark - RTCSessionDescriptionDelegate
@@ -484,86 +663,86 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
 
 - (void)peerConnection:(RTCPeerConnection *)peerConnection didCreateSessionDescription:(RTCSessionDescription *)originalSdp error:(NSError *)error
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:originalSdp.type sdp:originalSdp.description];
-        
-        [peerConnection setLocalDescriptionWithDelegate:self sessionDescription:sessionDescription];
-        
-    });
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//
+//        RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:originalSdp.type sdp:originalSdp.description];
+//
+//        [peerConnection setLocalDescriptionWithDelegate:self sessionDescription:sessionDescription];
+//
+//    });
 }
 
 
 - (void)peerConnection:(RTCPeerConnection *)peerConnection didSetSessionDescriptionWithError:(NSError *)error
 {
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (peerConnection.iceGatheringState == RTCICEGatheringGathering)
-        {
-        
-            NSArray *keys = [self.peerConnections allKeysForObject:peerConnection];
-            
-            if ([keys count] > 0)
-            {
-                NSArray *candidates = [self.peerToICEMap objectForKey:keys[0]];
-                
-                for (RTCICECandidate* candidate in candidates)
-                {
-                    [peerConnection addICECandidate:candidate];
-                    
-//                    NSLog(@"Added candidate from array, candidate = %@",candidate);
-                }
-//                NSLog(@"Added total %d candidates",candidates.count);
-                [self.peerToICEMap removeObjectForKey:keys[0]];
-            }
-        }
-        
-        if (peerConnection.signalingState == RTCSignalingHaveLocalOffer)
-        {
-            NSArray *keys = [self.peerConnections allKeysForObject:peerConnection];
-            if ([keys count] > 0)
-            {
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        if (peerConnection.iceGatheringState == RTCICEGatheringGathering)
+//        {
+//
+//            NSArray *keys = [self.peerConnections allKeysForObject:peerConnection];
+//
+//            if ([keys count] > 0)
+//            {
+//                NSArray *candidates = [self.peerToICEMap objectForKey:keys[0]];
+//
+//                for (RTCICECandidate* candidate in candidates)
+//                {
+//                    [peerConnection addICECandidate:candidate];
+//
+////                    NSLog(@"Added candidate from array, candidate = %@",candidate);
+//                }
+////                NSLog(@"Added total %d candidates",candidates.count);
+//                [self.peerToICEMap removeObjectForKey:keys[0]];
+//            }
+//        }
+//
+//        if (peerConnection.signalingState == RTCSignalingHaveLocalOffer)
+//        {
+//            NSArray *keys = [self.peerConnections allKeysForObject:peerConnection];
+//            if ([keys count] > 0)
+//            {
 //                NSString* sdp = peerConnection.localDescription.description;
-////
+//////
 //                NSString* modifiedSDP = [self modifySDP:sdp];
-                
-                
+//
+//
 //                 RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:peerConnection.localDescription.type sdp:modifiedSDP];
 ////                [self.delegate webRTC:self didSendSDPOffer:peerConnection.localDescription forPeerWithID:keys[0]];
-//                [self.delegate webRTC:self didSendSDPOffer:sessionDescription forPeerWithID:keys[0]];
-
-            }
-        }
-        else if (peerConnection.signalingState == RTCSignalingHaveRemoteOffer)
-        {
-            [peerConnection createAnswerWithDelegate:self constraints:[self _mediaConstraints]];
-        }
-        else if (peerConnection.signalingState == RTCSignalingStable)
-        {
-            NSArray* keys = [self.peerConnections allKeysForObject:peerConnection];
-            
-            if ([keys count] > 0)
-            {
-                NSString* role = [self.peerToRoleMap objectForKey:keys[0]];
-                
-                if (role == TLKPeerConnectionRoleReceiver)
-                {
-                    
-                    //NSLog(@"Answer desc = %@",peerConnection.localDescription);
-                    
+//                [self.delegate webRTC:self didSendSDPOffer:sessionDescription forPeerWithID:keys[0] calleeUser:self.calleeName];
+//
+//            }
+//        }
+//        else if (peerConnection.signalingState == RTCSignalingHaveRemoteOffer)
+//        {
+//            [peerConnection createAnswerWithDelegate:self constraints:[self _mediaConstraints]];
+//        }
+//        else if (peerConnection.signalingState == RTCSignalingStable)
+//        {
+//            NSArray* keys = [self.peerConnections allKeysForObject:peerConnection];
+//
+//            if ([keys count] > 0)
+//            {
+//                NSString* role = [self.peerToRoleMap objectForKey:keys[0]];
+//
+//                if (role == TLKPeerConnectionRoleReceiver)
+//                {
+//
+//                    //NSLog(@"Answer desc = %@",peerConnection.localDescription);
+//
 //                    NSString* modifiedSDP = [self modifySDP:peerConnection.localDescription.description];
-                    
+//
 //                    RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:peerConnection.localDescription.type sdp:modifiedSDP];
-                    
-                    
-//                    [peerConnection setLocalDescriptionWithDelegate:self sessionDescription:sessionDescription];
-                    
-                   // [self.delegate webRTC:self didSendSDPAnswer:sessionDescription forPeerWithID:keys[0]];
-                }
-               
-            }
-        }
-    });
+//
+//
+////                    [peerConnection setLocalDescriptionWithDelegate:self sessionDescription:sessionDescription];
+//
+//                    [self.delegate webRTC:self didSendSDPAnswer:sessionDescription forPeerWithID:keys[0] calleeUser:self.sdpSender];
+//                }
+//
+//            }
+//        }
+//    });
 }
 
 
@@ -621,7 +800,7 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
     
            // sdp1 = [sdp1 stringByAppendingString:@"\ra=end-of-candidates\r"];
     
-            //sdp1 = [sdp1 stringByAppendingString:@"a=ice-options:trickle\n"];
+            sdp = [sdp1 stringByAppendingString:@"a=ice-options:trickle\n"];
     
            // sdp1 = [sdp1 stringByAppendingString:@"a=end-of-candidates\n"];
 
@@ -629,7 +808,7 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
 //    
            // [sdp1 insertString:@"a=ice-options:trickle\r\n" atIndex:fingerPringTagRange.location];
     
-            return sdp1;
+            return sdp;
     
 }
 #pragma mark - String utilities
@@ -640,16 +819,16 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
     
     switch (state)
     {
-        case RTCSignalingStable:
+        case RTCSignalingStateStable:
             signalingStateString = @"Stable";
             break;
-        case RTCSignalingHaveLocalOffer:
+        case RTCSignalingStateHaveLocalOffer:
             signalingStateString = @"Have Local Offer";
             break;
-        case RTCSignalingHaveRemoteOffer:
+        case RTCSignalingStateHaveRemoteOffer:
             signalingStateString = @"Have Remote Offer";
             break;
-        case RTCSignalingClosed:
+        case RTCSignalingStateClosed:
             signalingStateString = @"Closed";
             break;
         default:
@@ -660,30 +839,30 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
     return signalingStateString;
 }
 
-- (NSString *)stringForConnectionState:(RTCICEConnectionState)state
+- (NSString *)stringForConnectionState:(RTCIceConnectionState)state
 {
     NSString *connectionStateString = nil;
     switch (state)
     {
-        case RTCICEConnectionNew:
+        case RTCIceConnectionStateNew:
             connectionStateString = @"New";
             break;
-        case RTCICEConnectionChecking:
+        case RTCIceConnectionStateChecking:
             connectionStateString = @"Checking";
             break;
-        case RTCICEConnectionConnected:
+        case RTCIceConnectionStateConnected:
             connectionStateString = @"Connected";
             break;
-        case RTCICEConnectionCompleted:
+        case RTCIceConnectionStateCompleted:
             connectionStateString = @"Completed";
             break;
-        case RTCICEConnectionFailed:
+        case RTCIceConnectionStateFailed:
             connectionStateString = @"Failed";
             break;
-        case RTCICEConnectionDisconnected:
+        case RTCIceConnectionStateDisconnected:
             connectionStateString = @"Disconnected";
             break;
-        case RTCICEConnectionClosed:
+        case RTCIceConnectionStateClosed:
             connectionStateString = @"Closed";
             break;
         default:
@@ -693,18 +872,18 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
     return connectionStateString;
 }
 
-- (NSString *)stringForGatheringState:(RTCICEGatheringState)state
+- (NSString *)stringForGatheringState:(RTCIceGatheringState)state
 {
     NSString *gatheringState = nil;
     switch (state)
     {
-        case RTCICEGatheringNew:
+        case RTCIceGatheringStateNew:
             gatheringState = @"New";
             break;
-        case RTCICEGatheringGathering:
+        case RTCIceGatheringStateGathering:
             gatheringState = @"Gathering";
             break;
-        case RTCICEGatheringComplete:
+        case RTCIceGatheringStateComplete:
             gatheringState = @"Complete";
             break;
         default:
@@ -757,83 +936,192 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
     });
 }
 
-- (void)peerConnection:(RTCPeerConnection *)peerConnection iceConnectionChanged:(RTCICEConnectionState)newState
+- (void)peerConnection:(RTCPeerConnection *)peerConnection iceConnectionChanged:(RTCIceConnectionState)newState
+{
+//    [peerConnection close];
+//    peerConnection = nil;
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//
+//        [self.delegate webRTC:self didObserveICEConnectionStateChange:newState forPeerWithID:[self identifierForPeer:peerConnection]];
+//    });
+}
+
+- (void)peerConnection:(RTCPeerConnection *)peerConnection iceGatheringChanged:(RTCIceGatheringState)newState
+{
+    
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//
+//
+//        NSLog(@"peerConnection iceGatheringChanged?");
+//
+//        if (newState == RTCIceGatheringStateComplete)
+//        {
+//            if ([peerConnection.localDescription.type isEqualToString:@"offer"])
+//            {
+////                [peerConnection createOfferWithDelegate:self constraints:[self _mediaConstraints]];
+////
+//                NSArray* keys = [self.peerConnections allKeysForObject:peerConnection];
+//
+//                RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:peerConnection.localDescription.type sdp:peerConnection.localDescription.description];
+//
+////                [self.delegate webRTC:self didSendSDPOffer:sessionDescription forPeerWithID:keys[0] calleeUser:self.calleeName];
+//            }
+//            else
+//            {
+//                NSArray* keys = [self.peerConnections allKeysForObject:peerConnection];
+////                if ([keys count] > 0)
+////                {
+////                    NSString* role = [self.peerToRoleMap objectForKey:keys[0]];
+////                    if (role == TLKPeerConnectionRoleReceiver)
+////                    {
+//
+//                        //NSLog(@"Answer desc = %@",peerConnection.localDescription);
+//                        NSString* modifiedSDP = [self modifySDP:peerConnection.localDescription.description];
+//
+//                        RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:peerConnection.localDescription.type sdp:modifiedSDP];
+//
+//
+////                        [self.delegate webRTC:self didSendSDPAnswer:sessionDescription forPeerWithID:keys[0] calleeUser:self.sdpSender];
+//
+//
+////                    }
+////
+////                }
+//            }
+//        }
+    
+//    });
+}
+
+//- (void)peerConnection:(RTCPeerConnection *)peerConnection gotICECandidate:(RTCIceCandidate *)candidate
+//{
+////    dispatch_async(dispatch_get_main_queue(), ^{
+//
+//        NSArray* keys = [self.peerConnections allKeysForObject:peerConnection];
+//
+//        if ([keys count] > 0)
+//        {
+////            [peerConnection addICECandidate:candidate];
+//            NSLog(@"local candi. = %@",candidate);
+//
+//            [self.delegate webRTC:self didSendICECandidate:candidate forPeerWithID:keys[0]];
+//        }
+////    });
+//}
+
+//- (void)peerConnection:(RTCPeerConnection *)peerConnection didOpenDataChannel:(RTCDataChannel *)dataChannel
+//{
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        NSLog(@"peerConnection didOpenDataChannel?");
+//    });
+//}
+
+
+/** Called when the SignalingState changed. */
+- (void)peerConnection:(RTCPeerConnection *)peerConnection
+didChangeSignalingState:(RTCSignalingState)stateChanged
+{
+    
+}
+
+/** Called when media is received on a new stream from remote peer. */
+- (void)peerConnection:(RTCPeerConnection *)peerConnection
+          didAddStream:(RTCMediaStream *)stream
+{
+    
+}
+
+/** Called when a remote peer closes a stream.
+ *  This is not called when RTCSdpSemanticsUnifiedPlan is specified.
+ */
+- (void)peerConnection:(RTCPeerConnection *)peerConnection
+       didRemoveStream:(RTCMediaStream *)stream
+{
+    
+}
+
+/** Called when negotiation is needed, for example ICE has restarted. */
+- (void)peerConnectionShouldNegotiate:(RTCPeerConnection *)peerConnection
+{
+    
+}
+
+/** Called any time the IceConnectionState changes. */
+- (void)peerConnection:(RTCPeerConnection *)peerConnection
+didChangeIceConnectionState:(RTCIceConnectionState)newState
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+       
+        
         [self.delegate webRTC:self didObserveICEConnectionStateChange:newState forPeerWithID:[self identifierForPeer:peerConnection]];
     });
 }
 
-- (void)peerConnection:(RTCPeerConnection *)peerConnection iceGatheringChanged:(RTCICEGatheringState)newState
+/** Called any time the IceGatheringState changes. */
+- (void)peerConnection:(RTCPeerConnection *)peerConnection
+didChangeIceGatheringState:(RTCIceGatheringState)newState
+{
+    NSLog(@"gathering state = %ld", newState);
+}
+
+/** New ice candidate has been found. */
+- (void)peerConnection:(RTCPeerConnection *)peerConnection
+didGenerateIceCandidate:(RTCIceCandidate *)candidate
+{
+    NSArray* keys = [self.peerConnections allKeysForObject:peerConnection];
+    
+    if ([keys count] > 0)
+    {
+        //            [peerConnection addICECandidate:candidate];
+        NSLog(@"local candi. = %@",candidate);
+        
+        [self.delegate webRTC:self didSendICECandidate:candidate forPeerWithID:keys[0]];
+    }
+}
+
+/** Called when a group of local Ice candidates have been removed. */
+- (void)peerConnection:(RTCPeerConnection *)peerConnection
+didRemoveIceCandidates:(NSArray<RTCIceCandidate *> *)candidates
 {
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        
-        NSLog(@"peerConnection iceGatheringChanged?");
-        
-        if (newState == RTCICEGatheringComplete)
-        {
-            if ([peerConnection.localDescription.type isEqualToString:@"offer"])
-            {
-//                [peerConnection createOfferWithDelegate:self constraints:[self _mediaConstraints]];
-//
-                NSArray* keys = [self.peerConnections allKeysForObject:peerConnection];
-                
-                RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:peerConnection.localDescription.type sdp:peerConnection.localDescription.description];
-                //                [self.delegate webRTC:self didSendSDPOffer:peerConnection.localDescription forPeerWithID:keys[0]];
-                [self.delegate webRTC:self didSendSDPOffer:sessionDescription forPeerWithID:keys[0] calleeUser:self.calleeName];
-                //[self.delegate webRTC:self sendCachedICECandidate:self.cachedCandidateToSendArray forPeerWithID:keys[0]];
-            }
-            else
-            {
-                NSArray* keys = [self.peerConnections allKeysForObject:peerConnection];
-//                if ([keys count] > 0)
-//                {
-//                    NSString* role = [self.peerToRoleMap objectForKey:keys[0]];
-//                    if (role == TLKPeerConnectionRoleReceiver)
-//                    {
-                
-                        //NSLog(@"Answer desc = %@",peerConnection.localDescription);
-                        NSString* modifiedSDP = [self modifySDP:peerConnection.localDescription.description];
-                        
-                        RTCSessionDescription* sessionDescription = [[RTCSessionDescription alloc] initWithType:peerConnection.localDescription.type sdp:modifiedSDP];
-                        
-//                             [self.delegate webRTC:self didSendSDPAnswer:peerConnection.localDescription forPeerWithID:keys[0]];
-
-                        [self.delegate webRTC:self didSendSDPAnswer:sessionDescription forPeerWithID:keys[0] calleeUser:self.sdpSender];
-                        
-                        //NSArray* keys = [self.peerConnections allKeysForObject:peerConnection];
-                        
-                       // [self.delegate webRTC:self sendCachedICECandidate:self.cachedCandidateToSendArray forPeerWithID:keys[0]];
-//                    }
-//
-//                }
-            }
-        }
-        
-    });
 }
 
-- (void)peerConnection:(RTCPeerConnection *)peerConnection gotICECandidate:(RTCICECandidate *)candidate
+/** New data channel has been opened. */
+- (void)peerConnection:(RTCPeerConnection *)peerConnection
+    didOpenDataChannel:(RTCDataChannel *)dataChannel
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        NSArray* keys = [self.peerConnections allKeysForObject:peerConnection];
-        if ([keys count] > 0)
-        {
-            [peerConnection addICECandidate:candidate];
-            //[self.delegate webRTC:self didSendICECandidate:candidate forPeerWithID:keys[0]];
-        }
-    });
-}
+        
+//        if (self.dataChannel == nil)
+//        {
+//            self.dataChannel = dataChannel;
+//
+//            self.dataChannel.delegate = self;
+//        }
 
-- (void)peerConnection:(RTCPeerConnection *)peerConnection didOpenDataChannel:(RTCDataChannel *)dataChannel
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.delegate peerConnection:self peerConnection:peerConnection openedDataChannel:dataChannel];
+        
+//        [self sendMessageUsingDataChannel:@"New Message"];
+        
         NSLog(@"peerConnection didOpenDataChannel?");
     });
 }
+
+-(void)dataChannelDidChangeState:(RTCDataChannel *)dataChannel
+{
+    NSLog(@"data channel state = %d", dataChannel.readyState);
+
+}
+-(void)dataChannel:(RTCDataChannel *)dataChannel didReceiveMessageWithBuffer:(RTCDataBuffer *)buffer
+{
+    NSString* newMessage = [[NSString alloc] initWithData:buffer.data encoding:NSUTF8StringEncoding];
+    
+    NSLog(@"new message = %@ ", newMessage);
+
+    [self sendMessageUsingDataChannel:@"reply"];
+}
+
 
 @end
 

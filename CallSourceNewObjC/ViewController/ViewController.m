@@ -9,7 +9,7 @@
 
 #import "ViewController.h"
 #import "AppDelegate.h"
-
+#import "ProviderDelegate.h"
 
 @interface ViewController ()
 
@@ -19,7 +19,7 @@
 
 @implementation ViewController
 
-@synthesize factory,peerConn,socket,iceCandidateArray,iceCandidateDictArray,iceCandidateGotFromServerArray;
+@synthesize factory,peerConn,iceCandidateArray,iceCandidateDictArray,iceCandidateGotFromServerArray;
 
 - (void)viewDidLoad
 {
@@ -34,36 +34,17 @@
     iceCandidateGotFromServerArray = [NSMutableArray new];
 
         // Do any additional setup after loading the view, typically from a nib.
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(setICEServersGotFromXIR:) name:NOTIFICATION_GOT_TURN
-                                               object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(setICEServersGotFromXIR:) name:NOTIFICATION_GOT_TURN
+//                                               object:nil];
 
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(connectionChanged:) name:NOTIFICATION_RTC_COONECTION_CHANGED
-                                               object:nil];
-//    [[APIManager sharedManager] getICECredentials];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(connectionChanged:) name:NOTIFICATION_RTC_COONECTION_CHANGED
+//                                               object:nil];
+    [[APIManager sharedManager] getICECredentials];
     
-//    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
-//    {
-//        [self.audioCallButton setHidden:true];
-//
-//        self.tlk = [[TLKWebRTC alloc] init];
-//
-//        self.tlk.delegate = self;
-//
-//        [[NSNotificationCenter defaultCenter] addObserver:self.tlk
-//                                                 selector:@selector(setSDPGotFromServer:) name:NOTIFICATION_GET_SDP
-//                                                   object:nil];
-//
-//        [[NSNotificationCenter defaultCenter] addObserver:self.tlk
-//                                                 selector:@selector(setCandidatesGotFromServer:) name:NOTIFICATION_GET_CANDIDATES
-//                                                   object:nil];
-//
-//
-//        [self.tlk addPeerConnectionForID:@"iPad" iceServerArray:self.serverCredArray];
-//    }
-    
+
     
     
 }
@@ -74,12 +55,23 @@
     
     if ([connectionState isEqualToString:@"Connected"])
     {
+//        ProviderDelegate* providerDelegate = [[ProviderDelegate alloc] init];
+        
+//        NSUUID* uuid = [NSUUID UUID];
+        
+       // [providerDelegate displayIncomingCall:uuid handle:@"handle" hasVideo:NO withCompletion:nil];
+        
         self.callStatusLabel.text = [NSString stringWithFormat:@"Connected to %@",self.calleName];
+
+        [[RTCAudioSession sharedInstance] setIsAudioEnabled:true];
 
     }
     else
+        if ([connectionState isEqualToString:@"DisConnectedOrFailed"])
     {
-        self.callStatusLabel.text = [NSString stringWithFormat:@"Failed to connect %@",self.calleName];
+        self.callStatusLabel.text = [NSString stringWithFormat:@"Failed to connect with %@",self.calleName];
+        
+        [self dismissViewControllerAnimated:true completion:nil];
     }
 }
 
@@ -248,7 +240,7 @@
     
     _welcomeUserLabel.text = [NSString stringWithFormat:@"Welcome %@",currentUser];
     
-    [self startACall];
+//    [self startACall];
 }
 
 //-(void)peerConnection:(RTCPeerConnection *)peerConnection addedStream:(RTCMediaStream *)stream
@@ -540,7 +532,8 @@
     
     [app.tlk addPeerConnectionForID:self.currentUser iceServerArray:self.serverCredArray];
     
-    // [self.tlk initDataChannel:@"iPhone"];
+    [RTCAudioSession sharedInstance].useManualAudio = YES;
+
     [[NSNotificationCenter defaultCenter] addObserver:app.tlk
                                              selector:@selector(setSDPGotFromServer:) name:NOTIFICATION_GET_SDP
                                                object:nil];
@@ -548,6 +541,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:app.tlk
                                              selector:@selector(setCandidatesGotFromServer:) name:NOTIFICATION_GET_CANDIDATES
                                                object:nil];
+    
     [app.tlk createOfferForPeerWithID:self.currentUser calleeName:self.calleName];
     
     self.callStatusLabel.hidden = NO;
@@ -557,22 +551,22 @@
 }
 -(void) setICEServersGotFromXIR:(NSNotification *)notification
 {
-    NSDictionary* dic = notification.object;
-    
-    NSDictionary* vDict = [dic objectForKey:@"v"];
-    
-    NSArray* iceServersDict = [vDict valueForKey:@"iceServers"];
-    
-    self.serverCredArray = [NSMutableArray new];
-    
-    for (NSDictionary* serverCredDict in iceServersDict)
-    {
-        //        NSString* url = [serverCredDict valueForKey:@"url"];
-        //        NSString* username = [serverCredDict valueForKey:@"username"];
-        //        NSString* credential = [serverCredDict valueForKey:@"credential"];
-        
-        [self.serverCredArray addObject:serverCredDict];
-    }
+//    NSDictionary* dic = notification.object;
+//    
+//    NSDictionary* vDict = [dic objectForKey:@"v"];
+//    
+//    NSArray* iceServersDict = [vDict valueForKey:@"iceServers"];
+//    
+//    self.serverCredArray = [NSMutableArray new];
+//    
+//    for (NSDictionary* serverCredDict in iceServersDict)
+//    {
+//        //        NSString* url = [serverCredDict valueForKey:@"url"];
+//        //        NSString* username = [serverCredDict valueForKey:@"username"];
+//        //        NSString* credential = [serverCredDict valueForKey:@"credential"];
+//        
+//        [self.serverCredArray addObject:serverCredDict];
+//    }
 }
 //- (IBAction)registerButtonClicked:(id)sender
 //{
@@ -670,7 +664,7 @@
 
 }
 
-- (void)webRTC:(TLKWebRTC *)webRTC didSendICECandidate:(RTCICECandidate *)candidate forPeerWithID:(NSString *)peerID
+- (void)webRTC:(TLKWebRTC *)webRTC didSendICECandidate:(RTCIceCandidate *)candidate forPeerWithID:(NSString *)peerID
 {
     NSMutableArray* iceCandidateArray = [NSMutableArray new];
     NSMutableArray* iceCandidateDictArray = [NSMutableArray new];
@@ -728,7 +722,7 @@
     
     NSMutableDictionary* dict = [NSMutableDictionary new];
     
-    for (RTCICECandidate* candidate in candidateArray)
+    for (RTCIceCandidate* candidate in candidateArray)
     {
         
         [dict setValue:candidate.sdpMid forKey:SDP_MID];
@@ -771,17 +765,16 @@
         [[APIManager sharedManager] sendCandidateUsername:@"iPhone" candidate:json1];
     }
 }
-- (void)webRTC:(TLKWebRTC *)webRTC didObserveICEConnectionStateChange:(RTCICEConnectionState)state forPeerWithID:(NSString *)peerID
+- (void)webRTC:(TLKWebRTC *)webRTC didObserveICEConnectionStateChange:(RTCIceConnectionState)state forPeerWithID:(NSString *)peerID
 {
     if (state == 2)
     {
         self.callStatusLabel.hidden = NO;
         
         self.callStatusLabel.text = @"Connected";
-        
-        
     }
-    NSLog(@"my state = %d", state);
+    
+    NSLog(@"my state = %ld", state);
     
     NSLog(@"my id = %@", peerID);
 }

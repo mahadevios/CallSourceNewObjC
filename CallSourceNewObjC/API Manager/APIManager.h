@@ -27,5 +27,5 @@
 -(void) sendCandidateUsername:(NSString *) usernameString candidate:(id)candidate;
 -(void) getICECredentials;
 -(void) getListOfRegisteredUser:(NSString*)usernameString;
-
+-(void) logoutUsername:(NSString *) usernameString;
 @end

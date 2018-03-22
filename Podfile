@@ -5,8 +5,12 @@ target 'CallSourceNewObjC' do
   # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
   # use_frameworks!
 
-	pod ‘libjingle_peerconnection’
-	pod ‘jetfire’
+	#pod ‘libjingle_peerconnection’
+	#pod ‘jetfire’
+	#pod "WebRTC"
+	platform :ios, '9.0'
+  	pod 'GoogleWebRTC'
+
   # Pods for CallSourceNewObjC
 
   target 'CallSourceNewObjCTests' do
