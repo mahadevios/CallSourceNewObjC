@@ -72,4 +72,7 @@ dependencies: \
   /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/RTCAudioSession.h \
   /Work/CallSourceNewObjC/Pods/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework/Headers/WebRTC.h \
   /Work/CallSourceNewObjC/CallSourceNewObjC/Libraries/NSString+URLEncodedString.h \
-  /Work/CallSourceNewObjC/CallSourceNewObjC/AppDelegate.h
+  /Work/CallSourceNewObjC/CallSourceNewObjC/AppDelegate.h \
+  /Work/CallSourceNewObjC/CallSourceNewObjC/ViewController/ReigisteredUsersViewController.h \
+  /Work/CallSourceNewObjC/CallSourceNewObjC/ViewController/ProviderDelegate.h \
+  /Work/CallSourceNewObjC/CallSourceNewObjC/ViewController/ChattingViewController.h

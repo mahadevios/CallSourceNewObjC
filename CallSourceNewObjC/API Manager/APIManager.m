@@ -65,11 +65,11 @@ static APIManager *singleton = nil;
 
 
 
--(void) sendSDPUsername:(NSString *) usernameString SDP:(id)SDP sdpType:(NSString*)sdpType calleeUser:(NSString*)calleeUser
+-(void) sendSDPUsername:(NSString *) usernameString SDP:(id)SDP sdpType:(NSString*)sdpType calleeUser:(NSString*)calleeUser allowVideo:(NSString*)allowVideo
 {
 //    if ([[AppPreferences sharedAppPreferences] isReachable])
 //    {
-        NSArray *params = [[NSArray alloc] initWithObjects:[NSString stringWithFormat:@"username=%@",usernameString],[NSString stringWithFormat:@"SDP=%@", SDP],[NSString stringWithFormat:@"sdpType=%@", sdpType],[NSString stringWithFormat:@"calleeUser=%@", calleeUser], nil];
+        NSArray *params = [[NSArray alloc] initWithObjects:[NSString stringWithFormat:@"username=%@",usernameString],[NSString stringWithFormat:@"SDP=%@", SDP],[NSString stringWithFormat:@"sdpType=%@", sdpType],[NSString stringWithFormat:@"calleeUser=%@", calleeUser],[NSString stringWithFormat:@"allowVideo=%@", allowVideo], nil];
         
         NSDictionary *dictionary = [[NSDictionary alloc] initWithObjectsAndKeys:params,REQUEST_PARAMETER, nil];
         
@@ -143,9 +143,9 @@ static APIManager *singleton = nil;
     
 }
 
--(void) sendCandidateUsername:(NSString *) usernameString candidate:(id)candidate
+-(void) sendCandidateUsername:(NSString *) usernameString candidate:(id)candidate allowVideo:(NSString*)allowVideo
 {
-    NSArray *params = [[NSArray alloc] initWithObjects:[NSString stringWithFormat:@"username=%@",usernameString],[NSString stringWithFormat:@"Candidate=%@", candidate],nil];
+    NSArray *params = [[NSArray alloc] initWithObjects:[NSString stringWithFormat:@"username=%@",usernameString],[NSString stringWithFormat:@"Candidate=%@", candidate],[NSString stringWithFormat:@"allowVideo=%@", allowVideo],nil];
     
     NSDictionary *dictionary = [[NSDictionary alloc] initWithObjectsAndKeys:params,REQUEST_PARAMETER, nil];
     

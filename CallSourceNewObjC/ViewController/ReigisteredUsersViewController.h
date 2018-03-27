@@ -18,6 +18,7 @@
 @property(nonatomic,strong) NSString* calleName;
 @property(nonatomic,strong) ChattingViewController* vc;
 @property(nonatomic,strong) RTCDataChannel* dataChannel;
+@property(nonatomic,strong) RTCEAGLVideoView *renderView;
 @property(nonatomic) BOOL isChatViewPresented;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;

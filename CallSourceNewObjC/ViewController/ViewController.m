@@ -704,11 +704,11 @@
     if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
             {
         
-                [[APIManager sharedManager] sendCandidateUsername:@"iPad" candidate:json1];
+//                [[APIManager sharedManager] sendCandidateUsername:@"iPad" candidate:json1];
             }
             else
             {
-                [[APIManager sharedManager] sendCandidateUsername:@"iPhone" candidate:json1];
+//                [[APIManager sharedManager] sendCandidateUsername:@"iPhone" candidate:json1];
             }
 }
 
@@ -758,11 +758,11 @@
     if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
     {
         
-        [[APIManager sharedManager] sendCandidateUsername:@"iPad" candidate:json1];
+//        [[APIManager sharedManager] sendCandidateUsername:@"iPad" candidate:json1];
     }
     else
     {
-        [[APIManager sharedManager] sendCandidateUsername:@"iPhone" candidate:json1];
+//        [[APIManager sharedManager] sendCandidateUsername:@"iPhone" candidate:json1];
     }
 }
 - (void)webRTC:(TLKWebRTC *)webRTC didObserveICEConnectionStateChange:(RTCIceConnectionState)state forPeerWithID:(NSString *)peerID

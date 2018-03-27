@@ -100,6 +100,8 @@
     
     NSString* notificationType =  [dic valueForKey:@"notificationType"];
 
+    NSString* allowVideo =  [dic valueForKey:@"allowVideo"];
+
     //NSString* sdpType =[dic valueForKey:@"sdpType"];
 
     if ([notificationType  isEqualToString: @"SDP"])
@@ -108,7 +110,7 @@
         
         NSString* sdpString =[apsDict valueForKey:@"alert"];
 
-        [self initTLKaddObserverForSDPandCandidate];  // init tlk and add observer for receiver
+        [self initTLKaddObserverForSDPandCandidate:allowVideo];  // init tlk and add observer for receiver
         
         if (sdpString != nil)
         {
@@ -119,7 +121,7 @@
     if ([notificationType  isEqualToString: @"Candidate"])
   
     {
-        [self initTLKaddObserverForSDPandCandidate];
+        [self initTLKaddObserverForSDPandCandidate:allowVideo];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_GET_CANDIDATES object:payload.dictionaryPayload];
             
@@ -129,18 +131,27 @@
     
 }
 
--(void)initTLKaddObserverForSDPandCandidate
+-(void)initTLKaddObserverForSDPandCandidate:(NSString*)allowVideo
 {
     
     if (self.tlk == nil) // for receiver
     {
         NSString* calleeUser = [[NSUserDefaults standardUserDefaults] valueForKey:USERDEFAULT_USER];
         
-        self.tlk = [[TLKWebRTC alloc] init];
+        if ([allowVideo isEqualToString:@"1"])
+        {
+            self.tlk = [[TLKWebRTC alloc] initWithVideo:true];
+
+        }
+        else
+        {
+            self.tlk = [[TLKWebRTC alloc] initWithVideo:false];
+
+        }
         
         self.tlk.delegate = self;
         
-        [self.tlk addPeerConnectionForID:calleeUser iceServerArray:self.serverCredArray];
+        [self.tlk addPeerConnectionForID:calleeUser iceServerArray:self.serverCredArray];  // init peer connection when receive a call
         
         [[NSNotificationCenter defaultCenter] addObserver:self.tlk
                                                  selector:@selector(setSDPGotFromServer:) name:NOTIFICATION_GET_SDP
@@ -162,19 +173,19 @@
 
 #pragma mark Signalling:TLK delegate methods
 
--(void)webRTC:(TLKWebRTC*)tlk didSendSDPOffer:(NSString*)localDescription forPeerWithID:(NSString*)peerId calleeUser:(NSString*)calleeUser
+-(void)webRTC:(TLKWebRTC*)tlk didSendSDPOffer:(NSString*)localDescription forPeerWithID:(NSString*)peerId calleeUser:(NSString*)calleeUser allowVideo:(NSString*)allowVideo
 {
-    [[APIManager sharedManager] sendSDPUsername:peerId SDP:localDescription sdpType:@"offer" calleeUser:calleeUser];
+    [[APIManager sharedManager] sendSDPUsername:peerId SDP:localDescription sdpType:@"offer" calleeUser:calleeUser allowVideo:(NSString*)allowVideo];
     
 }
 
--(void)webRTC:(TLKWebRTC*)tlk didSendSDPAnswer:(NSString*)localDescription forPeerWithID:(NSString*)peerId calleeUser:(NSString*)calleeUser
+-(void)webRTC:(TLKWebRTC*)tlk didSendSDPAnswer:(NSString*)localDescription forPeerWithID:(NSString*)peerId calleeUser:(NSString*)calleeUser allowVideo:(NSString*)allowVideo
 {
-    [[APIManager sharedManager] sendSDPUsername:peerId SDP:localDescription sdpType:@"answer" calleeUser:calleeUser];
+    [[APIManager sharedManager] sendSDPUsername:peerId SDP:localDescription sdpType:@"answer" calleeUser:calleeUser allowVideo:(NSString*)allowVideo];
     
 }
 
-- (void)webRTC:(TLKWebRTC *)webRTC didSendICECandidate:(RTCIceCandidate *)candidate forPeerWithID:(NSString *)peerID
+- (void)webRTC:(TLKWebRTC *)webRTC didSendICECandidate:(RTCIceCandidate *)candidate forPeerWithID:(NSString *)peerID allowVideo:(NSString*)allowVideo
 {
     NSMutableArray* iceCandidateArray = [NSMutableArray new];
     NSMutableArray* iceCandidateDictArray = [NSMutableArray new];
@@ -222,7 +233,7 @@
     }
 //    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
 //    {
-        [[APIManager sharedManager] sendCandidateUsername:peerID candidate:json1];
+        [[APIManager sharedManager] sendCandidateUsername:peerID candidate:json1 allowVideo:(NSString*)allowVideo];
 //    }
 //    else
 //    {
@@ -256,7 +267,9 @@
 
 - (void)webRTC:(TLKWebRTC *)webRTC addedStream:(RTCMediaStream *)stream forPeerWithID:(NSString *)peerID
 {
+    NSDictionary * notiDict = [[NSDictionary alloc] initWithObjectsAndKeys:stream,@"Stream", nil];
     
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_NEW_STREAM_RECEIVED object:notiDict];
 }
 
 - (void)webRTC:(TLKWebRTC *)webRTC removedStream:(RTCMediaStream *)stream forPeerWithID:(NSString *)peerID

@@ -23,8 +23,8 @@
 //-(void) validateUser:(NSString *) usernameString andPassword:(NSString *) passwordString;
 
 -(void) updateDevieTokenUsername:(NSString *) usernameString andDeviceId:(NSString*)DeviceToken;
--(void) sendSDPUsername:(NSString *) usernameString SDP:(id)SDP sdpType:(NSString*)sdpType calleeUser:(NSString*)calleeUser;
--(void) sendCandidateUsername:(NSString *) usernameString candidate:(id)candidate;
+-(void) sendSDPUsername:(NSString *) usernameString SDP:(id)SDP sdpType:(NSString*)sdpType calleeUser:(NSString*)calleeUser allowVideo:(NSString*)allowVideo;
+-(void) sendCandidateUsername:(NSString *) usernameString candidate:(id)candidate allowVideo:(NSString*)allowVideo;
 -(void) getICECredentials;
 -(void) getListOfRegisteredUser:(NSString*)usernameString;
 -(void) logoutUsername:(NSString *) usernameString;

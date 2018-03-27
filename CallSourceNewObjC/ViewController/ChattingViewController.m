@@ -19,11 +19,42 @@
 {
     [super viewDidLoad];
     
-    self.navigationBarTitleLabel.text = [NSString stringWithFormat:@"Connected with %@", self.connectedPeerName];
     
     self.messagesArray = [[NSMutableArray alloc] init];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
+    
     // Do any additional setup after loading the view.
 }
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    self.navigationBarTitleLabel.text = [NSString stringWithFormat:@"Connected with %@", self.connectedPeerName];
+
+    [self.mediaStream.videoTracks.lastObject addRenderer:self.renderView];
+    
+    self.renderView.frame = CGRectMake(self.view.frame.size.width*0.75 , self.chattextField.frame.origin.y+self.chattextField.frame.size.height+20, self.view.frame.size.width*0.23, self.view.frame.size.width*0.23);
+    
+    [self.view addSubview:self.renderView];
+}
+- (void)keyboardWasShown:(NSNotification *)notification
+{
+    
+    // Get the size of the keyboard.
+    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    //Given size may not account for screen rotation
+    self.keyboardHeight = MIN(keyboardSize.height,keyboardSize.width);
+    
+    self.tableViewHeight.constant = self.tableViewHeight.constant - self.keyboardHeight;
+//    int width = MAX(keyboardSize.height,keyboardSize.width);
+    
+    //your other code here..........
+}
+
 
 -(void)dataChannelDidChangeState:(RTCDataChannel *)dataChannel
 {
@@ -99,9 +130,9 @@
     
     UILabel* messageLabel = [cell viewWithTag:102];
     
-    messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    messageLabel.numberOfLines = 0;
-    messageLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+//    messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
+//    messageLabel.numberOfLines = 0;
+//    messageLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
     
     
    
@@ -175,6 +206,13 @@
     self.dataChannel.delegate = self;
 }
 
+-(void)addVideoView:(RTCEAGLVideoView*)renderView mediaStream:(RTCMediaStream*)mediaStream
+{
+    self.renderView = renderView;
+    
+    self.mediaStream = mediaStream;
+    
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

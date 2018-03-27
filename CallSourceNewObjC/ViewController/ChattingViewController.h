@@ -16,6 +16,10 @@
 @property(nonatomic,strong) NSString* connectedPeerName;
 @property(nonatomic,strong) NSString* callerName;
 @property(nonatomic,strong) RTCDataChannel* dataChannel;
+@property(nonatomic,strong) RTCEAGLVideoView *renderView;
+@property(nonatomic,strong) RTCMediaStream* mediaStream;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableViewHeight;
+@property(nonatomic) double keyboardHeight;
 @property (weak, nonatomic) IBOutlet UITextField *chattextField;
 
 - (IBAction)backButtonPressed:(id)sender;
@@ -24,5 +28,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *navigationBarTitleLabel;
 
 -(void)setDataChannelAnddelegate:(RTCDataChannel *)dataChannel;
+-(void)addVideoView:(RTCEAGLVideoView*)renderView mediaStream:(RTCMediaStream*)mediaStream;
 
 @end

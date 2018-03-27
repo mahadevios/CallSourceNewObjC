@@ -45,7 +45,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(dataChannelOpened:) name:NOTIFICATION_DATA_CHANNEL_OPENED
                                                object:nil];
-    [[APIManager sharedManager] getICECredentials];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(newStreamAdded:) name:NOTIFICATION_NEW_STREAM_RECEIVED
+                                               object:nil];
+//    [[APIManager sharedManager] getICECredentials];
     // Do any additional setup after loading the view.
 }
 
@@ -128,6 +132,34 @@
     
 }
 
+
+-(void)newStreamAdded:(NSNotification*)noti
+{
+    NSDictionary* dict = noti.object;
+    
+    RTCMediaStream* mediaStream = [dict objectForKey:@"Stream"];
+    
+    NSArray* videoTrack = [mediaStream videoTracks];
+    
+    if (videoTrack.count > 0)
+    {
+        if (self.vc == nil)
+        {
+            self.vc =  [self.storyboard instantiateViewControllerWithIdentifier:@"ChattingViewController"];
+            
+        }
+        
+//        self.renderView = [[RTCEAGLVideoView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/3, self.view.frame.size.height/3, self.view.frame.size.width/3, self.view.frame.size.height/3)];
+        self.renderView = [[RTCEAGLVideoView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
+
+        
+        
+        [self.vc addVideoView:self.renderView mediaStream:mediaStream];
+//        [mediaStream.videoTracks.lastObject addRenderer:self.renderView];
+    }
+    
+
+}
 //-(void)connectionChanged:(NSNotification*) notification
 //{
 //    NSString* connectionState = notification.object;
@@ -210,6 +242,18 @@
     
     UILabel* userNameLabel = [cell viewWithTag:101];
     
+    UIButton* audioCallButton = [cell viewWithTag:102];
+    
+    UIButton* videoCallButton = [cell viewWithTag:103];
+    
+    audioCallButton.tag = indexPath.row;
+    
+    videoCallButton.tag = indexPath.row;
+    
+    [audioCallButton addTarget:self action:@selector(audioCallButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [videoCallButton addTarget:self action:@selector(videoCallButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+
     userNameLabel.text = [NSString stringWithFormat:@"%@",[self.registeredUserArray objectAtIndex:indexPath.row]];
     
     return cell;
@@ -222,6 +266,7 @@
     
     UILabel* userNameLabel = [cell viewWithTag:101];
     
+    
 //    ViewController* vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
 //
 //    vc.calleName = userNameLabel.text;
@@ -233,7 +278,7 @@
     
     self.callStatusLabel.text = [NSString stringWithFormat:@"Connecting to %@", self.calleName];
     
-    [self startACall:userNameLabel.text];
+    [self startACall:userNameLabel.text allowVideo:false];
     
 //    ChattingViewController* vc =  [self.storyboard instantiateViewControllerWithIdentifier:@"ChattingViewController"];
 //
@@ -243,17 +288,39 @@
     
 }
 
--(void)startACall:(NSString*)calleName
+-(void)audioCallButtonClicked:(UIButton*)sender
+{
+    NSString* calleName = [NSString stringWithFormat:@"%@",[self.registeredUserArray objectAtIndex:sender.tag]];
+
+    self.calleName = calleName;
+    
+    self.callStatusLabel.text = [NSString stringWithFormat:@"Connecting to %@", self.calleName];
+    
+    [self startACall:self.calleName allowVideo:false];
+}
+
+-(void)videoCallButtonClicked:(UIButton*)sender
+{
+    NSString* calleName = [NSString stringWithFormat:@"%@",[self.registeredUserArray objectAtIndex:sender.tag]];
+    
+    self.calleName = calleName;
+    
+    self.callStatusLabel.text = [NSString stringWithFormat:@"Connecting to %@", self.calleName];
+    
+    [self startACall:self.calleName allowVideo:true];
+}
+
+-(void)startACall:(NSString*)calleName allowVideo:(BOOL)allowVideo
 {
     AppDelegate* app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    app.tlk = [[TLKWebRTC alloc] init];
+    app.tlk = [[TLKWebRTC alloc] initWithVideo:allowVideo];
     
     app.tlk.delegate = app;
     
     NSString* currentUser = [[NSUserDefaults standardUserDefaults] valueForKey:USERDEFAULT_USER];
 
-    [app.tlk addPeerConnectionForID:currentUser iceServerArray:self.serverCredArray];
+    [app.tlk addPeerConnectionForID:currentUser iceServerArray:self.serverCredArray]; // create peer connection
     
 //    [RTCAudioSession sharedInstance].useManualAudio = YES;
     
@@ -265,7 +332,7 @@
                                              selector:@selector(setCandidatesGotFromServer:) name:NOTIFICATION_GET_CANDIDATES
                                                object:nil];
     
-    [app.tlk createOfferForPeerWithID:currentUser calleeName:calleName];
+    [app.tlk createOfferForPeerWithID:currentUser calleeName:calleName];  // create offer
     
 //    self.callStatusLabel.hidden = NO;
     

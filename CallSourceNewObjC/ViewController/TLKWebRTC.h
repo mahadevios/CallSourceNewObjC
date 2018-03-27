@@ -26,6 +26,10 @@
 @property(nonatomic,strong) NSString* calleeName;
 @property(nonatomic,strong) NSString* sdpSender;
 @property(nonatomic,strong) RTCDataChannel* dataChannel;
+@property(nonatomic,strong) RTCVideoTrack *videoTrack;
+@property(nonatomic,strong) RTCVideoSource *videoSource;
+@property(nonatomic,strong) RTCCameraVideoCapturer * capt;
+@property(nonatomic,strong) RTCEAGLVideoView *renderView;
 
 - (void)addPeerConnectionForID:(NSString *)identifier iceServerArray:(NSMutableArray*)iceServerArray;
 - (void)removePeerConnectionForID:(NSString *)identifier;
@@ -46,11 +50,11 @@
 // WebRTC signal delegate protocol
 @protocol TLKWebRTCDelegate <NSObject>
 @required
--(void)webRTC:(TLKWebRTC*)tlk didSendSDPOffer:(RTCSessionDescription*)localDescription forPeerWithID:(NSString*)peerId calleeUser:(NSString*)calleeUser;
-- (void)webRTC:(TLKWebRTC *)webRTC didSendSDPAnswer:(RTCSessionDescription *)answer forPeerWithID:(NSString* )peerID calleeUser:(NSString*)calleeUser;
-- (void)webRTC:(TLKWebRTC *)webRTC didSendICECandidate:(RTCIceCandidate *)candidate forPeerWithID:(NSString *)peerID;
+-(void)webRTC:(TLKWebRTC*)tlk didSendSDPOffer:(NSString*)localDescription forPeerWithID:(NSString*)peerId calleeUser:(NSString*)calleeUser allowVideo:(NSString*)allowVideo;
+- (void)webRTC:(TLKWebRTC *)webRTC didSendSDPAnswer:(NSString *)answer forPeerWithID:(NSString* )peerID calleeUser:(NSString*)calleeUser allowVideo:(NSString*)allowVideo;
+- (void)webRTC:(TLKWebRTC *)webRTC didSendICECandidate:(RTCIceCandidate *)candidate forPeerWithID:(NSString *)peerID allowVideo:(NSString*)allowVideo;
 - (void)webRTC:(TLKWebRTC *)webRTC didObserveICEConnectionStateChange:(RTCIceConnectionState)state forPeerWithID:(NSString *)peerID;
-- (void)webRTC:(TLKWebRTC *)webRTC sendCachedICECandidate:(NSMutableArray *)candidateArray forPeerWithID:(NSString *)peerID;
+//- (void)webRTC:(TLKWebRTC *)webRTC sendCachedICECandidate:(NSMutableArray *)candidateArray forPeerWithID:(NSString *)peerID;
 - (void)webRTC:(TLKWebRTC *)webRTC addedStream:(RTCMediaStream *)stream forPeerWithID:(NSString *)peerID;
 - (void)webRTC:(TLKWebRTC *)webRTC removedStream:(RTCMediaStream *)stream forPeerWithID:(NSString *)peerID;
 - (void)peerConnection:(TLKWebRTC* )webRTC peerConnection:(RTCPeerConnection *)peerConnection openedDataChannel:(RTCDataChannel *)dataChannel;
