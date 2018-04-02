@@ -206,7 +206,7 @@
                                         <constraints>
                                             <constraint firstAttribute="width" constant="70" id="oRE-8Q-YAx"/>
                                         </constraints>
-                                        <state key="normal" title="Cancel"/>
+                                        <state key="normal" title="HangUp"/>
                                         <connections>
                                             <action selector="backButtonPressed:" destination="I0l-0O-cav" eventType="touchUpInside" id="mjW-UQ-s7z"/>
                                         </connections>
@@ -223,21 +223,8 @@
                                     <constraint firstItem="ySq-Cv-8xB" firstAttribute="centerY" secondItem="per-IH-aST" secondAttribute="centerY" id="qhm-FS-NWE"/>
                                 </constraints>
                             </view>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Gop-oN-ZRA">
-                                <rect key="frame" x="20" y="84" width="244" height="30"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mAz-mp-mdS">
-                                <rect key="frame" x="294" y="82" width="46" height="35"/>
-                                <state key="normal" title="Send"/>
-                                <connections>
-                                    <action selector="sendButtonClicked:" destination="I0l-0O-cav" eventType="touchUpInside" id="J4b-Su-hRf"/>
-                                </connections>
-                            </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="668-Tm-D2k">
-                                <rect key="frame" x="0.0" y="134" width="375" height="527"/>
+                                <rect key="frame" x="0.0" y="74" width="375" height="487"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="114" id="z3Q-wN-Dbz">
@@ -278,26 +265,71 @@
                                     <outlet property="delegate" destination="I0l-0O-cav" id="GKW-HJ-cS4"/>
                                 </connections>
                             </tableView>
+                            <view tag="4001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7in-S7-4wg">
+                                <rect key="frame" x="-0.5" y="617" width="375" height="50"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="cgt-hK-uxv">
+                                        <rect key="frame" x="50" y="10" width="275" height="30"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="6E8-Gy-Kjq"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NhJ-Ca-aiK">
+                                        <rect key="frame" x="10" y="18" width="20" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="NhJ-Ca-aiK" secondAttribute="height" multiplier="1:1" id="8EX-7d-UNP"/>
+                                            <constraint firstAttribute="width" constant="20" id="RGT-u2-Sam"/>
+                                        </constraints>
+                                        <state key="normal" image="Attachment"/>
+                                        <connections>
+                                            <action selector="attachmentButtonClicked:" destination="I0l-0O-cav" eventType="touchUpInside" id="chL-DQ-9tq"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kds-8O-ZO1">
+                                        <rect key="frame" x="345" y="18" width="20" height="20"/>
+                                        <state key="normal" image="Send"/>
+                                        <connections>
+                                            <action selector="sendMessageButtonCLlked:" destination="I0l-0O-cav" eventType="touchUpInside" id="sG3-gh-VUu"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="cgt-hK-uxv" firstAttribute="width" secondItem="7in-S7-4wg" secondAttribute="width" constant="-100" id="8wX-gh-OSM"/>
+                                    <constraint firstAttribute="trailing" secondItem="kds-8O-ZO1" secondAttribute="trailing" constant="10" id="L9r-Fc-LdA"/>
+                                    <constraint firstAttribute="height" constant="50" id="LPd-Ne-lCn"/>
+                                    <constraint firstAttribute="bottom" secondItem="kds-8O-ZO1" secondAttribute="bottom" constant="12" id="Nnw-aZ-Fn4"/>
+                                    <constraint firstItem="kds-8O-ZO1" firstAttribute="height" secondItem="NhJ-Ca-aiK" secondAttribute="height" id="RNO-vT-pOh"/>
+                                    <constraint firstItem="NhJ-Ca-aiK" firstAttribute="leading" secondItem="7in-S7-4wg" secondAttribute="leading" constant="10" id="XU3-PD-RoE"/>
+                                    <constraint firstItem="cgt-hK-uxv" firstAttribute="centerX" secondItem="7in-S7-4wg" secondAttribute="centerX" id="u9w-Eb-dKC"/>
+                                    <constraint firstItem="kds-8O-ZO1" firstAttribute="width" secondItem="NhJ-Ca-aiK" secondAttribute="width" id="wCr-yh-7wI"/>
+                                    <constraint firstAttribute="bottom" secondItem="cgt-hK-uxv" secondAttribute="bottom" constant="10" id="yhK-AW-lR8"/>
+                                    <constraint firstAttribute="bottom" secondItem="NhJ-Ca-aiK" secondAttribute="bottom" constant="12" id="zBK-Rs-MRu"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="per-IH-aST" firstAttribute="width" secondItem="bBm-X5-pyo" secondAttribute="width" id="0ox-fE-9Ab"/>
-                            <constraint firstItem="668-Tm-D2k" firstAttribute="top" secondItem="Gop-oN-ZRA" secondAttribute="bottom" constant="20" id="2gM-R5-RcE"/>
                             <constraint firstItem="per-IH-aST" firstAttribute="top" secondItem="aAz-dS-c6d" secondAttribute="bottom" constant="-16" id="4QA-xA-hbx"/>
-                            <constraint firstItem="Gop-oN-ZRA" firstAttribute="top" secondItem="per-IH-aST" secondAttribute="bottom" constant="10" id="CKT-wk-FQj"/>
-                            <constraint firstItem="mAz-mp-mdS" firstAttribute="leading" secondItem="Gop-oN-ZRA" secondAttribute="trailing" constant="30" id="LYu-cO-p13"/>
+                            <constraint firstItem="7in-S7-4wg" firstAttribute="centerX" secondItem="bBm-X5-pyo" secondAttribute="centerX" id="GQO-vx-Lfe"/>
+                            <constraint firstItem="668-Tm-D2k" firstAttribute="top" secondItem="per-IH-aST" secondAttribute="bottom" id="GsB-ek-WZT"/>
                             <constraint firstItem="668-Tm-D2k" firstAttribute="width" secondItem="bBm-X5-pyo" secondAttribute="width" id="N6i-AE-w7a"/>
-                            <constraint firstItem="mAz-mp-mdS" firstAttribute="centerY" secondItem="Gop-oN-ZRA" secondAttribute="centerY" id="TcP-Qu-0xb"/>
-                            <constraint firstItem="Gop-oN-ZRA" firstAttribute="leading" secondItem="bBm-X5-pyo" secondAttribute="leading" constant="20" id="Y9n-9U-HyM"/>
+                            <constraint firstItem="zLy-dM-Dj6" firstAttribute="top" secondItem="7in-S7-4wg" secondAttribute="bottom" id="PsM-qe-nlS"/>
+                            <constraint firstItem="7in-S7-4wg" firstAttribute="width" secondItem="bBm-X5-pyo" secondAttribute="width" id="Rcl-xE-gyf"/>
                             <constraint firstItem="668-Tm-D2k" firstAttribute="centerX" secondItem="bBm-X5-pyo" secondAttribute="centerX" id="YV9-17-HJU"/>
-                            <constraint firstItem="Gop-oN-ZRA" firstAttribute="width" secondItem="bBm-X5-pyo" secondAttribute="width" multiplier="0.65" id="Z9f-Sl-iNt"/>
-                            <constraint firstItem="668-Tm-D2k" firstAttribute="height" secondItem="bBm-X5-pyo" secondAttribute="height" constant="-140" id="ZlC-r3-A5M"/>
+                            <constraint firstItem="668-Tm-D2k" firstAttribute="height" secondItem="bBm-X5-pyo" secondAttribute="height" constant="-180" id="ZlC-r3-A5M"/>
                             <constraint firstItem="per-IH-aST" firstAttribute="centerX" secondItem="bBm-X5-pyo" secondAttribute="centerX" id="ukL-hp-c1z"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="chattextField" destination="Gop-oN-ZRA" id="zb0-uy-RT6"/>
+                        <outlet property="chatTextViewBottonDistConstraint" destination="PsM-qe-nlS" id="Eqa-iv-OKc"/>
                         <outlet property="navigationBarTitleLabel" destination="ySq-Cv-8xB" id="ZrK-C4-guV"/>
+                        <outlet property="navigationView" destination="per-IH-aST" id="FbH-rr-X8f"/>
+                        <outlet property="sendTextView" destination="cgt-hK-uxv" id="5lt-9m-mO8"/>
                         <outlet property="tableView" destination="668-Tm-D2k" id="rKy-se-jD0"/>
                         <outlet property="tableViewHeight" destination="ZlC-r3-A5M" id="J8x-ab-8sm"/>
                     </connections>
@@ -376,7 +408,9 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Attachment" width="30" height="30"/>
         <image name="AudioCall" width="34" height="34"/>
+        <image name="Send" width="30" height="30"/>
         <image name="VideoCall" width="34" height="34"/>
     </resources>
 </document>

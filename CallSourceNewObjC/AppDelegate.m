@@ -18,7 +18,7 @@
 @end
 
 @implementation AppDelegate
-@synthesize voipRegistry;
+@synthesize voipRegistry,tlk;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -106,6 +106,8 @@
 
     if ([notificationType  isEqualToString: @"SDP"])
     {
+        NSLog(@"my sdp");
+
         NSDictionary* apsDict = [dic objectForKey:@"aps"];
         
         NSString* sdpString =[apsDict valueForKey:@"alert"];
@@ -121,21 +123,38 @@
     if ([notificationType  isEqualToString: @"Candidate"])
   
     {
+        NSLog(@"my candidate");
         [self initTLKaddObserverForSDPandCandidate:allowVideo];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_GET_CANDIDATES object:payload.dictionaryPayload];
             
     }
-    
+    else
+        if ([notificationType  isEqualToString: @"HangUpCall"])
+            
+        {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_HANG_UP_CALL object:payload.dictionaryPayload];
+            
+            [[NSNotificationCenter defaultCenter] removeObserver:self];
+            
+        }
     
     
 }
+
++ (AppDelegate *)sharedAppDelegate
+{
+    return [[UIApplication sharedApplication] delegate];
+}
+
 
 -(void)initTLKaddObserverForSDPandCandidate:(NSString*)allowVideo
 {
     
     if (self.tlk == nil) // for receiver
     {
+        
         NSString* calleeUser = [[NSUserDefaults standardUserDefaults] valueForKey:USERDEFAULT_USER];
         
         if ([allowVideo isEqualToString:@"1"])
@@ -149,10 +168,13 @@
 
         }
         
+        NSLog(@"new tlk created = %@",self.tlk);
+
         self.tlk.delegate = self;
         
         [self.tlk addPeerConnectionForID:calleeUser iceServerArray:self.serverCredArray];  // init peer connection when receive a call
         
+
         [[NSNotificationCenter defaultCenter] addObserver:self.tlk
                                                  selector:@selector(setSDPGotFromServer:) name:NOTIFICATION_GET_SDP
                                                    object:nil];
@@ -161,7 +183,7 @@
                                                  selector:@selector(setCandidatesGotFromServer:) name:NOTIFICATION_GET_CANDIDATES
                                                    object:nil];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self.tlk
+        [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(hangUpCall:) name:NOTIFICATION_HANG_UP_CALL
                                                    object:nil];
     
@@ -171,6 +193,64 @@
     
 }
 
+-(void)hangUpCall:(NSNotification*)noti
+{
+    NSString* currentUser = [[NSUserDefaults standardUserDefaults] valueForKey:USERDEFAULT_USER];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_DISMISS_CHATVIEW object:nil];
+
+    [self removePeerConnectionForID:currentUser];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
+//    [RTCPeerConnectionFactory dealloc];
+
+}
+
+- (void)removePeerConnectionForID:(NSString *)identifier
+{
+
+    RTCPeerConnection* peer = self.tlk.peerConnections[identifier];
+    
+    [self.tlk.peerConnections removeObjectForKey:identifier];
+
+    [self.tlk.peerToRoleMap removeObjectForKey:identifier];
+    
+//    if (self.tlk.localMediaStream != nil)
+//    {
+        peer.delegate = nil;
+        
+        self.tlk.delegate = nil;
+        
+        self.tlk.dataChannel = nil;
+        
+        self.tlk.dataChannel.delegate = nil;
+        
+        [peer removeStream:self.tlk.localMediaStream];
+        
+        [peer close];
+    
+        self.tlk.localMediaStream = nil;
+
+        peer = nil;
+    
+        [[NSNotificationCenter defaultCenter] removeObserver:self.tlk];
+    
+//        [[NSNotificationCenter defaultCenter] removeObserver:self];
+
+
+
+//        if (self.tlk != nil)
+//        {
+    NSLog(@"tlk set to nil, tlk = %@", self.tlk);
+
+            self.tlk = nil;
+    
+//        }
+    
+//    }
+    
+}
 #pragma mark Signalling:TLK delegate methods
 
 -(void)webRTC:(TLKWebRTC*)tlk didSendSDPOffer:(NSString*)localDescription forPeerWithID:(NSString*)peerId calleeUser:(NSString*)calleeUser allowVideo:(NSString*)allowVideo

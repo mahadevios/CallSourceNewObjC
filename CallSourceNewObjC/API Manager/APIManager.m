@@ -84,6 +84,25 @@ static APIManager *singleton = nil;
 //    }
 }
 
+-(void) hangUpCall:(NSString*)username calleUser:(NSString*)calleeUser
+{
+    //    if ([[AppPreferences sharedAppPreferences] isReachable])
+    //    {
+    NSArray *params = [[NSArray alloc] initWithObjects:[NSString stringWithFormat:@"username=%@", username],[NSString stringWithFormat:@"calleeUser=%@", calleeUser], nil];
+    
+    NSDictionary *dictionary = [[NSDictionary alloc] initWithObjectsAndKeys:params,REQUEST_PARAMETER, nil];
+    
+    DownloadMetaDataJob *downloadmetadatajob=[[DownloadMetaDataJob alloc]initWithdownLoadEntityJobName:HANGUP_CALL_API withRequestParameter:dictionary withResourcePath:HANGUP_CALL_API withHttpMethd:POST];
+    [downloadmetadatajob startMetaDataDownLoad];
+    //    }
+    //    else
+    //    {
+    //        [[[UIApplication sharedApplication].keyWindow viewWithTag:789] setHidden:YES];
+    //
+    //        [[AppPreferences sharedAppPreferences] showAlertViewWithTitle:@"No internet connection!" withMessage:@"Please turn on your inernet connection to access this feature" withCancelText:nil withOkText:@"OK" withAlertTag:1000];
+    //    }
+}
+
 -(void) getListOfRegisteredUser:(NSString*)usernameString
 {
     //    if ([[AppPreferences sharedAppPreferences] isReachable])

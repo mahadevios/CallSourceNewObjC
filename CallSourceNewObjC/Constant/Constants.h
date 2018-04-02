@@ -26,7 +26,7 @@
 //#define  BASE_URL_PATH                  @"http://115.249.195.23:8080/Communicator/feedcom"  //live server
 //#define  BASE_URL_PATH                  @"http://115.249.195.23:9090/Communicator/feedcom/"  //live server
 
-#define  BASE_URL_PATH                  @"http://192.168.3.75:6666/coreflex/feedcom"
+#define  BASE_URL_PATH                  @"http://192.168.3.75:8080/coreflex/feedcom"
 //#define  BASE_URL_PATH                  @"https://callsourcecommunicator.com:8080/coreflex/feedcom"
 
 //#define  BASE_URL_PATH                  @"http://192.168.3.165:8080/coreflex/feedcom"
@@ -59,6 +59,7 @@
 #define SEND_CANDIDATES_API                 @"MahadevSendNotificationWithCandidate"
 #define GET_LISTOF_REGISTERED_USER          @"getListOfRegisteredUsers"
 #define LOGOUT_API                          @"MahadevLogout"
+#define HANGUP_CALL_API                     @"MahadevSendNotificationHangUpConnectedCall"
 
 
 
@@ -80,6 +81,9 @@
 #define NOTIFICATION_LOGOUT                         @"logOut"
 #define NOTIFICATION_DATA_CHANNEL_OPENED            @"dataChannelOpened"
 #define NOTIFICATION_NEW_STREAM_RECEIVED            @"newStreamReceived"
+#define NOTIFICATION_DISMISS_CHATVIEW               @"dismissChatView"
+
+//#define NOTIFICATION_HANGUP_REMOTE_CALL             @"hangUpConnectedCall"
 
 
 #define NOTIFICATION_GOT_TURN                        @"gotTurn"

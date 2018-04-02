@@ -9,6 +9,7 @@
 #import "LoginViewController.h"
 #import "AppPreferences.h"
 #import "ViewController.h"
+#import "ReigisteredUsersViewController.h"
 
 @interface LoginViewController ()
 
@@ -53,7 +54,7 @@
     {
         [[NSUserDefaults standardUserDefaults] setValue:_usernameTextField.text forKey:USERDEFAULT_USER];
         
-        ViewController* viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
+        ReigisteredUsersViewController* viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"ReigisteredUsersViewController"];
 
         [[[UIApplication sharedApplication] keyWindow] setRootViewController:viewController];
         

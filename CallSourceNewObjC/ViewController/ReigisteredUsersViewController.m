@@ -12,6 +12,7 @@
 
 #import "AppDelegate.h"
 
+#import "LoginViewController.h"
 
 @interface ReigisteredUsersViewController ()
 
@@ -23,21 +24,50 @@
 {
     [super viewDidLoad];
     
+   
+    
+    
+//    [[APIManager sharedManager] getICECredentials];
+    // Do any additional setup after loading the view.
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    self.registeredUserArray = [NSMutableArray new];
+    
+    NSString* loggedInUser = [[NSUserDefaults standardUserDefaults] valueForKey:USERDEFAULT_USER];
+    
+    [[APIManager sharedManager] getListOfRegisteredUser:loggedInUser];
+    
+    NSString* currentUser = [[NSUserDefaults standardUserDefaults] valueForKey:USERDEFAULT_USER];
+    
+    _navigationHedingLabel.text = [NSString stringWithFormat:@"Welcome %@",currentUser];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self.app.tlk];
+
+    self.isChatViewPresented = false;
+    
+    [self addObesrvers];
+    
+    self.chatViewController = nil;
+    
+}
+-(void)addObesrvers
+{
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(getListOfRegisteredUser:) name:NOTIFICATION_GET_LISTOF_REGISTERED_USER
                                                object:nil];
     
-    self.registeredUserArray = [NSMutableArray new];
-
-    NSString* loggedInUser = [[NSUserDefaults standardUserDefaults] valueForKey:USERDEFAULT_USER];
     
-    [[APIManager sharedManager] getListOfRegisteredUser:loggedInUser];
-
+    
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(setICEServersGotFromXIR:) name:NOTIFICATION_GOT_TURN
-                                                   object:nil];
+                                             selector:@selector(setICEServersGotFromXIR:) name:NOTIFICATION_GOT_TURN
+                                               object:nil];
     
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(connectionChanged:) name:NOTIFICATION_RTC_COONECTION_CHANGED
                                                object:nil];
@@ -49,10 +79,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(newStreamAdded:) name:NOTIFICATION_NEW_STREAM_RECEIVED
                                                object:nil];
-//    [[APIManager sharedManager] getICECredentials];
-    // Do any additional setup after loading the view.
 }
-
 -(void)connectionChanged:(NSNotification*) notification
 {
     NSDictionary* notiDict = notification.object;
@@ -70,28 +97,30 @@
 //        self.providerDelegate = [[ProviderDelegate alloc] init];
         
 //        NSUUID* uuid = [NSUUID UUID];
+       
+        [self hideHud];
         
         if (!self.isChatViewPresented)
         {
             self.callStatusLabel.text = [NSString stringWithFormat:@"Connected with %@", connectedUserName];
             
-            if (self.vc == nil)
+            if (self.chatViewController == nil)
             {
-                self.vc =  [self.storyboard instantiateViewControllerWithIdentifier:@"ChattingViewController"];
+                self.chatViewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"ChattingViewController"];
 
             }
             
-            self.vc.connectedPeerName = connectedUserName;
+            self.chatViewController.connectedPeerName = connectedUserName;
             
             //        self.dataChannel.delegate = vc;
         
-            [self.vc setDataChannelAnddelegate:dataChannel];
+            [self.chatViewController setDataChannelAnddelegate:dataChannel];
             
             self.isChatViewPresented = true;
             
-            self.vc.callerName = currentUser;
+            self.chatViewController.callerName = currentUser;
             
-            [self presentViewController:self.vc animated:true completion:nil];
+            [self presentViewController:self.chatViewController animated:true completion:nil];
             
         
         }
@@ -103,10 +132,10 @@
         
     }
     else
-        if ([connState intValue] == RTCIceConnectionStateFailed || [connState intValue] == RTCIceConnectionStateDisconnected)
+        if ([connState intValue] == RTCIceConnectionStateDisconnected)
 
         {
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_HANG_UP_CALL object:nil];
+//            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_HANG_UP_CALL object:nil];
             
             self.callStatusLabel.text = [NSString stringWithFormat:@"Select a user to make a call"];
 
@@ -122,13 +151,13 @@
     
     RTCDataChannel* dataChannel = [dict objectForKey:@"DataChannel"];
     
-    if (self.vc == nil)
+    if (self.chatViewController == nil)
     {
-        self.vc =  [self.storyboard instantiateViewControllerWithIdentifier:@"ChattingViewController"];
+        self.chatViewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"ChattingViewController"];
         
     }
     
-    [self.vc setDataChannelAnddelegate:dataChannel];
+    [self.chatViewController setDataChannelAnddelegate:dataChannel];
     
 }
 
@@ -143,9 +172,9 @@
     
     if (videoTrack.count > 0)
     {
-        if (self.vc == nil)
+        if (self.chatViewController == nil)
         {
-            self.vc =  [self.storyboard instantiateViewControllerWithIdentifier:@"ChattingViewController"];
+            self.chatViewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"ChattingViewController"];
             
         }
         
@@ -154,7 +183,7 @@
 
         
         
-        [self.vc addVideoView:self.renderView mediaStream:mediaStream];
+        [self.chatViewController addVideoView:self.renderView mediaStream:mediaStream];
 //        [mediaStream.videoTracks.lastObject addRenderer:self.renderView];
     }
     
@@ -202,14 +231,7 @@
     }
 }
 
--(void)viewWillAppear:(BOOL)animated
-{
-    
-    NSString* currentUser = [[NSUserDefaults standardUserDefaults] valueForKey:USERDEFAULT_USER];
-    
-    _navigationHedingLabel.text = [NSString stringWithFormat:@"Welcome %@",currentUser];
-    
-}
+
 -(void)getListOfRegisteredUser:(NSNotification*)notification
 {
     
@@ -312,27 +334,41 @@
 
 -(void)startACall:(NSString*)calleName allowVideo:(BOOL)allowVideo
 {
-    AppDelegate* app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [AppDelegate sharedAppDelegate].tlk = [[TLKWebRTC alloc] initWithVideo:allowVideo];
     
-    app.tlk = [[TLKWebRTC alloc] initWithVideo:allowVideo];
+    NSLog(@"start call tlk = %@",[AppDelegate sharedAppDelegate].tlk);
+//    if ( self.app.tlk != nil)
+//    {
+//        [self.app hangUpCall:nil];
+//    }
+//    self.app.tlk = [[TLKWebRTC alloc] initWithVideo:allowVideo];
     
-    app.tlk.delegate = app;
+//    [self.app setMyTlk:self.app.tlk];
+//    app.tlk = self.tlk;
+    
+    [AppDelegate sharedAppDelegate].tlk.delegate = [AppDelegate sharedAppDelegate];
     
     NSString* currentUser = [[NSUserDefaults standardUserDefaults] valueForKey:USERDEFAULT_USER];
 
-    [app.tlk addPeerConnectionForID:currentUser iceServerArray:self.serverCredArray]; // create peer connection
+    [[AppDelegate sharedAppDelegate].tlk addPeerConnectionForID:currentUser iceServerArray:self.serverCredArray]; // create peer connection
     
 //    [RTCAudioSession sharedInstance].useManualAudio = YES;
     
-    [[NSNotificationCenter defaultCenter] addObserver:app.tlk
+    [[NSNotificationCenter defaultCenter] addObserver:[AppDelegate sharedAppDelegate].tlk
                                              selector:@selector(setSDPGotFromServer:) name:NOTIFICATION_GET_SDP
                                                object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:app.tlk
+    [[NSNotificationCenter defaultCenter] addObserver:[AppDelegate sharedAppDelegate].tlk
                                              selector:@selector(setCandidatesGotFromServer:) name:NOTIFICATION_GET_CANDIDATES
                                                object:nil];
     
-    [app.tlk createOfferForPeerWithID:currentUser calleeName:calleName];  // create offer
+    [[NSNotificationCenter defaultCenter] addObserver:[AppDelegate sharedAppDelegate]
+                                             selector:@selector(hangUpCall:) name:NOTIFICATION_HANG_UP_CALL
+                                               object:nil];
+    [self showHud];
+    
+    [[AppDelegate sharedAppDelegate].tlk createOfferForPeerWithID:currentUser calleeName:calleName];  // create offer
+    
     
 //    self.callStatusLabel.hidden = NO;
     
@@ -340,6 +376,19 @@
     
 }
 
+-(void)showHud
+{
+    self.hud = [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
+    self.hud.tag=789;
+    self.hud.label.text = @"Connecting...";
+    self.hud.detailsLabel.text=@" Please wait";
+    self.hud.minSize = CGSizeMake(150.f, 100.f);
+}
+
+-(void)hideHud
+{
+     [[[UIApplication sharedApplication].keyWindow viewWithTag:789] removeFromSuperview];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -353,6 +402,15 @@
     NSString* currentUser = [[NSUserDefaults standardUserDefaults] valueForKey:USERDEFAULT_USER];
 
     [[APIManager sharedManager] logoutUsername:currentUser];
+    
+    [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:USERDEFAULT_USER];
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main"
+                                                         bundle: nil];
+    
+    LoginViewController* viewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    
+    [[UIApplication sharedApplication].keyWindow setRootViewController:viewController];
 }
 
 - (IBAction)startChattingButtonClicked:(id)sender

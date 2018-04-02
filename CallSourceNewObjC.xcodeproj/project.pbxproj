@@ -26,6 +26,7 @@
 		846786EF20078474003BA50F /* TLKWebRTC.m in Sources */ = {isa = PBXBuildFile; fileRef = 846786EE20078474003BA50F /* TLKWebRTC.m */; };
 		846F6F4B203E981C0024B83F /* NSString+URLEncodedString.m in Sources */ = {isa = PBXBuildFile; fileRef = 846F6F4A203E981C0024B83F /* NSString+URLEncodedString.m */; };
 		846FCB3B20580F1B00372458 /* ProviderDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 846FCB3A20580F1B00372458 /* ProviderDelegate.m */; };
+		8470A214206F6E1D00FE72B4 /* SampleImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8470A213206F6E1D00FE72B4 /* SampleImage.png */; };
 		8480D91B2052B63C009FA396 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8480D91A2052B63C009FA396 /* LoginViewController.m */; };
 		84AD187A1F862B8C003E8216 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD18791F862B8C003E8216 /* main.m */; };
 		84AD187D1F862B8C003E8216 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AD187C1F862B8C003E8216 /* AppDelegate.m */; };
@@ -99,6 +100,7 @@
 		846F6F4A203E981C0024B83F /* NSString+URLEncodedString.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSString+URLEncodedString.m"; path = "CallSourceNewObjC/Libraries/NSString+URLEncodedString.m"; sourceTree = SOURCE_ROOT; };
 		846FCB3920580F1B00372458 /* ProviderDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProviderDelegate.h; sourceTree = "<group>"; };
 		846FCB3A20580F1B00372458 /* ProviderDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProviderDelegate.m; sourceTree = "<group>"; };
+		8470A213206F6E1D00FE72B4 /* SampleImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SampleImage.png; sourceTree = "<group>"; };
 		8480D9192052B63C009FA396 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		8480D91A2052B63C009FA396 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		84AD18751F862B8C003E8216 /* CallSourceNewObjC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CallSourceNewObjC.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -282,6 +284,7 @@
 				84E164971F8793550015AA48 /* CallSourceNewObjC.entitlements */,
 				84AD187B1F862B8C003E8216 /* AppDelegate.h */,
 				84AD187C1F862B8C003E8216 /* AppDelegate.m */,
+				8470A213206F6E1D00FE72B4 /* SampleImage.png */,
 				84AD18811F862B8C003E8216 /* Main.storyboard */,
 				84AD18841F862B8C003E8216 /* Assets.xcassets */,
 				845040FF1F88D62000CED70B /* PrefixHeader.pch */,
@@ -469,6 +472,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8470A214206F6E1D00FE72B4 /* SampleImage.png in Resources */,
 				84AD18881F862B8C003E8216 /* LaunchScreen.storyboard in Resources */,
 				84AD18851F862B8C003E8216 /* Assets.xcassets in Resources */,
 				84AD18831F862B8C003E8216 /* Main.storyboard in Resources */,

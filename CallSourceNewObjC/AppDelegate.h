@@ -17,6 +17,7 @@
 @property (strong, nonatomic) PKPushRegistry * voipRegistry;
 @property(nonatomic,strong) TLKWebRTC* tlk;
 @property(nonatomic,strong) NSMutableArray* serverCredArray;
-
++ (AppDelegate *)sharedAppDelegate;
+-(void)hangUpCall:(NSNotification*)noti;
 @end
 

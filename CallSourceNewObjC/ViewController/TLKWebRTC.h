@@ -19,6 +19,17 @@
 
 - (instancetype)initWithVideoDevice:(AVCaptureDevice *)device;
 - (instancetype)initWithVideo:(BOOL)allowVideo;
+
+@property (readwrite, nonatomic) RTCMediaStream *localMediaStream;
+@property (nonatomic, strong) RTCPeerConnectionFactory *peerFactory;
+@property (nonatomic,strong) RTCDataChannel* dataChannelRemote;
+@property (nonatomic, strong) NSMutableDictionary *peerConnections;
+@property (nonatomic, strong) NSMutableDictionary *peerToRoleMap;
+@property (nonatomic, strong) NSMutableDictionary *peerToICEMap;
+@property (nonatomic) BOOL allowVideo;
+@property (nonatomic, strong) AVCaptureDevice *videoDevice;
+@property (nonatomic, strong) NSMutableArray *iceServers;
+
 @property(nonatomic,strong) NSMutableArray* iceCandidateDictArray;
 @property(nonatomic,strong) NSMutableArray* iceCandidateGotFromServerArray;
 @property(nonatomic,strong) NSMutableArray* XIRiceServerArray;
@@ -43,7 +54,7 @@
 
 // The WebRTC stream captured locally that will be sent to peers, useful for displaying a preview of the local camera
 // in an RTCVideoRenderer and muting or blacking out th stream sent to peers
-@property (readonly, nonatomic) RTCMediaStream *localMediaStream;
+//@property (readonly, nonatomic) RTCMediaStream *localMediaStream;
 
 @end
 

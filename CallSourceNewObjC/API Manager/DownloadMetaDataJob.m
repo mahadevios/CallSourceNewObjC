@@ -281,6 +281,31 @@
                     [[AppPreferences sharedAppPreferences] showAlertViewWithTitle:@"Error" withMessage:@"please try again" withCancelText:nil withOkText:@"OK" withAlertTag:1000];
                 }
             }
+            else
+                if ([self.downLoadEntityJobName isEqualToString:HANGUP_CALL_API])
+                {
+                    
+                    if (response != nil)
+                    {
+                        
+                        if ([[response objectForKey:@"code"] isEqualToString:SUCCESS])
+                        {
+                            
+                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_HANG_UP_CALL object:response];
+                            
+                            
+                        }else
+                        {
+                            [[[UIApplication sharedApplication].keyWindow viewWithTag:789] removeFromSuperview];
+                            
+                            [[AppPreferences sharedAppPreferences] showAlertViewWithTitle:@"Error" withMessage:@"username or password is incorrect, please try again" withCancelText:nil withOkText:@"OK" withAlertTag:1000];
+                        }
+                    }else
+                    {
+                        [[[UIApplication sharedApplication].keyWindow viewWithTag:789] removeFromSuperview];
+                        [[AppPreferences sharedAppPreferences] showAlertViewWithTitle:@"Error" withMessage:@"please try again" withCancelText:nil withOkText:@"OK" withAlertTag:1000];
+                    }
+                }
 //       if ([self.downLoadEntityJobName isEqualToString:UPDATE_DEVICE_TOKEN_API])
 //    {
 //        

@@ -45,15 +45,7 @@
 
 @interface TLKWebRTC () <RTCPeerConnectionDelegate,RTCDataChannelDelegate,RTCVideoCapturerDelegate>
 
-@property (readwrite, nonatomic) RTCMediaStream *localMediaStream;
-@property (nonatomic, strong) RTCPeerConnectionFactory *peerFactory;
-@property (nonatomic,strong) RTCDataChannel* dataChannelRemote;
-@property (nonatomic, strong) NSMutableDictionary *peerConnections;
-@property (nonatomic, strong) NSMutableDictionary *peerToRoleMap;
-@property (nonatomic, strong) NSMutableDictionary *peerToICEMap;
-@property (nonatomic) BOOL allowVideo;
-@property (nonatomic, strong) AVCaptureDevice *videoDevice;
-@property (nonatomic, strong) NSMutableArray *iceServers;
+
 
 @end
 
@@ -317,6 +309,7 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
     
     self.iceCandidateGotFromServerArray = [NSJSONSerialization JSONObjectWithData:data1 options:NSJSONReadingAllowFragments error:&err];
     
+    
 //    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
 //    {
     
@@ -403,6 +396,9 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
 {
     RTCPeerConnection *peerConnection = [self.peerConnections objectForKey:peerID];
     
+    //RTCDataChannel* c = [peerConnection dataChannelForLabel:@"" configuration:nil];
+    
+    
     //    __weak RTCPeerConnection *peerConnection1 = peerConnection;
     
     if (isReceiver)
@@ -473,6 +469,8 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
     //    {
     if (peerConnection.remoteDescription == nil)
     {
+        NSLog(@"my candidate noti.");
+
         [self.iceCandidateDictArray addObject:candidate];
     }
     else
@@ -605,34 +603,7 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
     }];
 }
 
-- (void)removePeerConnectionForID:(NSString *)identifier
-{
-    RTCPeerConnection* peer = self.peerConnections[identifier];
-    
-    [self.peerConnections removeObjectForKey:identifier];
-    
-    [self.peerToRoleMap removeObjectForKey:identifier];
-    
-    if (self.localMediaStream != nil)
-    {
-        [peer removeStream:self.localMediaStream];
-        
-        [peer close];
-        
-        self.localMediaStream = nil;
-        
-        peer = nil;
-        
-        AppDelegate* app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 
-        if (app.tlk != nil)
-        {
-            app.tlk = nil;
-        }
-        
-    }
-    
-}
 
 -(void)createDataChannel:(RTCPeerConnection*)peerConnection  // create new data channel along with offer
 {
@@ -666,13 +637,13 @@ static NSString * const TLKWebRTCSTUNHostname2 = @"turn:66.228.45.110:3478";
 
 
 
--(void)hangUpCall:(NSNotification*)noti
-{
-    NSString* currentUser = [[NSUserDefaults standardUserDefaults] valueForKey:USERDEFAULT_USER];
-    
-    [self removePeerConnectionForID:currentUser];
-    
-}
+//-(void)hangUpCall:(NSNotification*)noti
+//{
+//    NSString* currentUser = [[NSUserDefaults standardUserDefaults] valueForKey:USERDEFAULT_USER];
+//    
+//    [self removePeerConnectionForID:currentUser];
+//    
+//}
 - (NSString *)identifierForPeer:(RTCPeerConnection *)peer
 {
     NSArray *keys = [self.peerConnections allKeysForObject:peer];
@@ -1082,9 +1053,17 @@ didChangeSignalingState:(RTCSignalingState)stateChanged
 didChangeIceConnectionState:(RTCIceConnectionState)newState
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-       
-        
-        [self.delegate webRTC:self didObserveICEConnectionStateChange:newState forPeerWithID:[self identifierForPeer:peerConnection]];
+    
+//        __weak TLKWebRTC* rtc = self;
+//        if (newState == RTCIceConnectionStateDisconnected)
+//        {
+//
+//        }
+//        else
+//        {
+            [self.delegate webRTC:self didObserveICEConnectionStateChange:newState forPeerWithID:[self identifierForPeer:peerConnection]];
+
+//        }
     });
 }
 

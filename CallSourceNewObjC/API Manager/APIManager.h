@@ -28,4 +28,5 @@
 -(void) getICECredentials;
 -(void) getListOfRegisteredUser:(NSString*)usernameString;
 -(void) logoutUsername:(NSString *) usernameString;
+-(void) hangUpCall:(NSString*)username calleUser:(NSString*)calleeUser;
 @end
